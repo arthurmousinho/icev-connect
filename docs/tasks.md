@@ -16,7 +16,7 @@
 ## Backend 
 
 - [x] Setup inicial do projeto usando Nest.js e Prisma ORM
-- [ ] Estrutura inicial do banco de dados (schema do prisma)
+- [x] Estrutura inicial do banco de dados (schema do prisma)
 - [ ] Criação do módulo de banco de dados (prisma service)
 - [ ] Criação do módulo de autenticação (module + controller + service)
 - [ ] Integração com o Google para login com e-mail institucional (OAuth)
