@@ -3,7 +3,6 @@ import { Logo } from "./logo";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "./ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { ProfileButton } from "./profile-button";
 
 const links = [
@@ -14,7 +13,7 @@ const links = [
 
 export function Header() {
     return (
-        <header className="flex items-center justify-between p-4 bg-white shadow-md">
+        <header className="flex items-center justify-between p-4 bg-white shadow-md w-full">
             <Logo />
             <nav className="flex items-center gap-6">
                 {links.map((link, index) => (
