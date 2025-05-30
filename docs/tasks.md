@@ -5,7 +5,8 @@
 - [x] Setup inicial do projeto usando Next.js e ShadcnUI
 - [ ] Estrutura inicial das páginas relacionadas ao aluno:
     - [x] Página de login
-    - [ ] Página inicial (home)
+    - [x] Página inicial (home)
+    - [ ] Página de listagem de artigos sobre um deterninado tópico
     - [ ] Página do perfil do aluno
 - [ ] Estrutura inicial das páginas de admin:
     - [ ] Página de postagens
