@@ -1,7 +1,7 @@
 import { ArticleCard } from "@/components/article-card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { ArrowDown, ArrowLeft, Gamepad2 } from "lucide-react";
+import { ArrowDown, ArrowLeft, Gamepad2, Heart } from "lucide-react";
 
 export default function TopicPage() {
     return (
@@ -15,10 +15,16 @@ export default function TopicPage() {
                                 Desenvolvimento de Jogos
                             </h1>
                         </div>
-                        <Button variant="secondary">
-                            <ArrowLeft size={20} />
-                            Voltar
-                        </Button>
+                        <nav className="space-x-4">
+                            <Button variant="secondary">
+                                <Heart size={20} />
+                                Favoritar
+                            </Button>
+                            <Button variant="secondary">
+                                <ArrowLeft size={20} />
+                                Voltar
+                            </Button>
+                        </nav>
                     </div>
                     <Separator className="my-4" />
                 </header>

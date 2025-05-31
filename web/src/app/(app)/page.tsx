@@ -1,4 +1,3 @@
-import { Header } from "@/components/header";
 import { Hero } from "./hero";
 import { TopicsSidebar } from "./topics-sidebar";
 import { ArticleCard } from "@/components/article-card";
