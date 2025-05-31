@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Noto_Serif, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Header } from "@/components/header";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -28,6 +29,7 @@ export default function RootLayout({
       <body
         className={`${geistMono.variable} ${notoSerif.variable} antialiased font-sans`}
       >
+        <Header />
         {children}
       </body>
     </html>

@@ -6,7 +6,9 @@
 - [ ] Estrutura inicial das páginas relacionadas ao aluno:
     - [x] Página de login
     - [x] Página inicial (home)
-    - [ ] Página de listagem de artigos sobre um deterninado tópico
+    - [x] Página de listagem de artigos sobre um deterninado tópico
+    - [ ] Página de mostra o conteúdo de uma postagem
+    - [ ] Página de criação de artigo (escrita)
     - [ ] Página do perfil do aluno
 - [ ] Estrutura inicial das páginas de admin:
     - [ ] Página de postagens
