@@ -6,67 +6,67 @@ import Link from "next/link"
 const topics = [
     {
         title: "Todos",
-        href: "",
+        href: "/",
         isActive: true,
         icon: <AlignLeft size={20} />
     },
     {
         title: "Programação Web",
-        href: "#",
+        href: "/topic/programacao-web",
         isActive: false,
         icon: <Globe size={20} />
     },
     {
         title: "Desenvolvimento Mobile",
-        href: "#",
+        href: "/topic/desenvolvimento-mobile",
         isActive: false,
         icon: <Smartphone size={20} />
     },
     {
         title: "Inteligência Artificial",
-        href: "#",
+        href: "/topic/inteligencia-artificial",
         isActive: false,
         icon: <Bot size={20} />
     },
     {
         title: "Desenvolvimento de Jogos",
-        href: "#",
+        href: "/topic/desenvolvimento-de-jogos",
         isActive: false,
         icon: <Gamepad2 size={20} />
     },
     {
         title: "Estrutura de Dados",
-        href: "#",
+        href: "/topic/estrutura-de-dados",
         isActive: false,
         icon: <Network size={20} />
     },
     {
         title: "Design & Arquitetura de Software",
-        href: "#",
+        href: "/topic/design-e-arquitetura-de-software",
         isActive: false,
         icon: <Layers size={20} />
     },
     {
         title: "Sistemas Operacionais",
-        href: "#",
+        href: "/topic/sistemas-operacionais",
         isActive: false,
         icon: <Monitor size={20} />
     },
     {
         title: "Redes e Sistemas Distribuídos",
-        href: "#",
+        href: "/topic/redes-e-sistemas-distribuidos",
         isActive: false,
         icon: <EthernetPort size={20} />
     },
     {
         title: "Banco de Dados",
-        href: "#",
+        href: "/topic/banco-de-dados",
         isActive: false,
         icon: <Database size={20} />
     },
     {
         title: "Requisitos e Modelagem de Software",
-        href: "#",
+        href: "/topic/requisitos-e-modelagem-de-software",
         isActive: false,
         icon: <FileText size={20} />
     },
@@ -78,25 +78,25 @@ const topics = [
     },
     {
         title: "Internet das Coisas",
-        href: "#",
+        href: "/topic/internet-das-coisas",
         isActive: false,
         icon: <Microchip size={20} />
     },
     {
         title: "Algoritmos e Programação",
-        href: "#",
+        href: "/topic/algoritmos-e-programacao",
         isActive: false,
         icon: <Braces size={20} />
     },
     {
         title: "Teste e Qualidade de Software",
-        href: "#",
+        href: "/topic/teste-e-qualidade-de-software",
         isActive: false,
         icon: <ListChecks size={20} />
     },
     {
         title: "Arquitetura de computadores",
-        href: "#",
+        href: "/topic/arquitetura-de-computadores",
         isActive: false,
         icon: <Cpu size={20} />
     }
