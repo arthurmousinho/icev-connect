@@ -18,10 +18,7 @@ model User {
   role   UserRole @default(USER)
   status Status   @default(ACTIVE)
 
-  events Event[]
   posts  Post[]
-
-  participatingEvents Event[] @relation("event_participants")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -52,35 +49,11 @@ model Topic {
 
   title  String  @unique
   posts  Post[]
-  events Event[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("topics")
-}
-
-model Event {
-  id String @id @default(cuid())
-
-  title       String
-  description String
-  location    String
-
-  topics Topic[]
-
-  organizer   User   @relation(fields: [organizerId], references: [id])
-  organizerId String @map("organizer_id")
-
-  participants User[] @relation("event_participants")
-
-  startTime DateTime @map("start_time")
-  endTime   DateTime @map("end_time")
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  @@map("events")
 }
 
 enum UserRole {
