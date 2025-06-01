@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { UserBadge } from "@/components/user-badge";
 import { LikesBadge } from "@/components/likes-badge";
+import { Header } from "@/components/header";
 
 const article = `
 ## Introduction
@@ -122,7 +123,8 @@ Modern web development is a dynamic and rapidly evolving field. With the right c
 
 export default function ArticlePage() {
     return (
-        <div className="flex flex-col h-dvh justify-top items-center mt-10">
+        <div className="flex flex-col h-dvh justify-top items-center gap-10">
+            <Header />
             <main className="w-full max-w-[800px] space-y-10 pb-10">
                 <header className="space-y-4">
                     <p className="text-sm font-semibold text-muted-foreground">

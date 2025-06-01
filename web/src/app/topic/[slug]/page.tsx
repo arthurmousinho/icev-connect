@@ -3,10 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ArrowDown, ArrowLeft, Gamepad2, Heart } from "lucide-react";
 import { TopicHeader } from "./topic-header";
+import { Header } from "@/components/header";
 
 export default function TopicPage() {
     return (
-        <div className="flex flex-col h-dvh justify-top items-center mt-10">
+        <div className="flex flex-col h-dvh justify-top items-center gap-10">
+            <Header />
             <div className="w-full max-w-[1200px] flex flex-row items-start justify-center gap-10">
                 <TopicHeader />
                 <div className="flex flex-col w-full pb-10">

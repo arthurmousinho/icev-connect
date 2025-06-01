@@ -16,7 +16,7 @@ const notoSerif = Noto_Serif({
 
 export const metadata: Metadata = {
   title: "iCEVConnect",
-  description: "Rede acadêmica para os alunos do iCEV para troca de conhecimento e promoção de eventos dentro do ambiente acadêmico",
+  description: "Rede acadêmica para os alunos do iCEV para troca de conhecimento dentro do ambiente acadêmico",
 };
 
 export default function RootLayout({
@@ -29,7 +29,6 @@ export default function RootLayout({
       <body
         className={`${geistMono.variable} ${notoSerif.variable} antialiased font-sans`}
       >
-        <Header />
         {children}
       </body>
     </html>

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { AlignLeft, Bot, Braces, Cpu, Database, DatabaseZap, EthernetPort, FileText, Gamepad2, Globe, Layers, ListChecks, Microchip, Monitor, Network, Smartphone } from "lucide-react"
 import { TopicButton } from "@/components/topic-button";
+import { Header } from "@/components/header";
 
 const topics = [
     {
@@ -107,7 +108,8 @@ const topics = [
 
 export default function HomePage() {
     return (
-        <main className="w-full flex flex-col gap-20 justify-center items-center mt-20 pb-20">
+        <main className="w-full flex flex-col gap-20 justify-center items-center pb-20">
+            <Header />
             <Hero />
             <div className="w-full max-w-[1200px] flex flex-row items-start justify-center gap-10">
                 <aside className="flex flex-col gap-4 sticky top-20">
