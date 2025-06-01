@@ -12,9 +12,8 @@
     - [x] Página do perfil do aluno
 - [ ] Estrutura inicial das páginas de admin:
     - [ ] Página de login (email e senha)
-    - [ ] Página de postagens
-    - [ ] Página de eventos 
     - [ ] Página de usuários
+    - [ ] Página de postagens
     - [ ] Página de tópicos
 
 ## Backend 
