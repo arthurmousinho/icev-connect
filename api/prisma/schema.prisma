@@ -11,13 +11,15 @@ datasource db {
 model User {
   id String @id @default(cuid())
 
-  email     String @unique
-  name      String
-  username  String @unique
-  avatarUrl String @map("avatar_url")
+  email          String  @unique
+  name           String
+  username       String  @unique
+  hashedPassword String? @map("hashed_password")
+  avatarUrl      String  @map("avatar_url")
 
-  role   UserRole @default(USER)
-  status Status   @default(ACTIVE)
+  role     UserRole     @default(USER)
+  isActive Boolean      @default(true) @map("is_active")
+  provider AuthProvider @default(GOOGLE)
 
   posts Post[]
 
@@ -60,9 +62,13 @@ model Topic {
 enum UserRole {
   USER
   ADMIN
+
+  @@map("user_role")
 }
 
-enum Status {
-  ACTIVE
-  INACTIVE
+enum AuthProvider {
+  GOOGLE
+  CREDENTIALS
+
+  @@map("auth_provider")
 }

@@ -4,11 +4,14 @@ import {
     Req,
     UseGuards,
     Res,
+    Post,
+    Body,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { Response, Request } from 'express';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
+import { LoginWithEmailAndPassswordDTO } from './dtos/login-with-email-password.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -32,6 +35,14 @@ export class AuthController {
         return res.redirect(
             `${process.env.FRONTEND_URL}/auth/callback?token=${tokens.accessToken}`
         );
+    }
+
+    @Post('login')
+    public async loginWithEmailAndPassword(@Body() body: LoginWithEmailAndPassswordDTO) {
+        return await this.authService.loginWithEmailAndPassword({
+            email: body.email,
+            password: body.password
+        });
     }
 
 }
