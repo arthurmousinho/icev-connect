@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "src/infra/database/prisma.service";
 import type { CreateUserDTO } from "./dtos/create-user.dto";
 
@@ -36,6 +36,21 @@ export class UserService {
         });
 
         return userCreated;
+    }
+
+    public async getProfile(id: string) {
+        const user = await this.findById(id);
+
+        if (!user) {
+            throw new NotFoundException('O perfil deste usuário não foi encontrado.');
+        }
+
+        return {
+            id: user.id,
+            email: user.email,
+            username: user.username,
+            avatarUrl: user.avatarUrl,
+        };
     }
 
 }

@@ -4,7 +4,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { UserService } from 'src/core/user/user.service';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 
     constructor(
         private readonly userService: UserService
@@ -28,10 +28,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         }
 
         return {
-            userId: user.id,
-            email: user.email,
-            role: user.role
-        };
+            id: user.id
+        }
     }
 
 }

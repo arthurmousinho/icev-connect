@@ -63,7 +63,7 @@ export class AuthService {
     private signToken(payload: { userId: string, email: string }) {
         return this.jwtService.sign({
             sub: payload.userId,
-            email: payload.email
+            email: payload.email,
         });
     }
 
