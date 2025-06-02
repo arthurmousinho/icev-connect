@@ -28,9 +28,9 @@
 - [x] Criação do módulo de usuário:
     - [x] Endpoint que retorna o perfil do usuário logado
     - [x] Metódos para integrar como o módulo de autenticação
-- [x] Criação do módulo de tópicos:
-    - [x] Endpoint que retorna o perfil do usuário logado
-    - [x] Metódos para integrar como o módulo de autenticação
+- [ ] Criação do módulo de tópicos:
+    - [ ] Endpoint para criar um tópico
+    - [ ] Endpoint para listar os tópios cadastrados
 
 - [ ] Criação do módulo de postagens (module + controller + service)
 - [ ] Funcionalides de criar uma postagem
