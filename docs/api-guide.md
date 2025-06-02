@@ -1,4 +1,4 @@
-# iCEVConnect: Guia para Rodar a API
+# iCEVConnect: Guia para Rodar a API (backend)
 
 Este guia descreve os passos necessários para clonar, configurar e executar localmente a API do projeto iCEVConnect.
 
