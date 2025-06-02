@@ -1,32 +1,28 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from 'src/infra/database/prisma.service';
 import { compare } from 'bcrypt';
+import { UserService } from '../user/user.service';
 import type { LoginWithEmailAndPassswordDTO } from './dtos/login-with-email-password.dto';
 
 @Injectable()
 export class AuthService {
 
     constructor(
-        private prismaService: PrismaService,
+        private userService: UserService,
         private jwtService: JwtService,
     ) { }
 
     public async validateOAuthLogin(user: any) {
         const { email, name, avatarUrl, username } = user;
 
-        let userFound = await this.prismaService.user.findUnique({
-            where: { email },
-        });
+        let userFound = await this.userService.findByEmail(email);
 
         if (!userFound) {
-            userFound = await this.prismaService.user.create({
-                data: {
-                    email,
-                    name,
-                    username,
-                    avatarUrl,
-                },
+            userFound = await this.userService.create({
+                email,
+                name,
+                username,
+                avatarUrl,
             });
         }
 
@@ -44,9 +40,7 @@ export class AuthService {
     public async loginWithEmailAndPassword(data: LoginWithEmailAndPassswordDTO) {
         const { email, password } = data;
 
-        const user = await this.prismaService.user.findUnique({
-            where: { email },
-        });
+        const user = await this.userService.findByEmail(email);
 
         if (!user || !user.hashedPassword) {
             throw new UnauthorizedException('Credenciais inválidas');

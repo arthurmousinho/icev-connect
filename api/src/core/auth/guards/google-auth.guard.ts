@@ -7,9 +7,6 @@ export class GoogleAuthGuard extends AuthGuard('google') {
         const res = context.switchToHttp().getResponse();
 
         if (err || !user) {
-            console.log(err) // null
-            console.log(info) // undefined
-
             const message = encodeURIComponent(
                 err?.message || info?.message || 'Erro na autenticação.'
             );

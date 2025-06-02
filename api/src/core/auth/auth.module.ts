@@ -5,6 +5,7 @@ import { AuthController } from "./auth.controller";
 import { GoogleStrategy } from "./strategies/google.strategy";
 import { JwtStrategy } from "./strategies/jwt.strategy";
 import { DatabaseModule } from "src/infra/database/database.module";
+import { UserModule } from "../user/user.module";
 
 @Module({
     imports: [
@@ -13,6 +14,7 @@ import { DatabaseModule } from "src/infra/database/database.module";
             secret: process.env.JWT_SECRET,
             signOptions: { expiresIn: process.env.JWT_EXPIRATION },
         }),
+        UserModule
     ],
     providers: [
         AuthService,
