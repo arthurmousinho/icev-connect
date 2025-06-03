@@ -3,12 +3,14 @@ import { DatabaseModule } from './infra/database/database.module';
 import { AppController } from './app.controller';
 import { AuthModule } from './core/auth/auth.module';
 import { UserModule } from './core/user/user.module';
+import { TopicModule } from './core/topic/topic.module';
 
 @Module({
   imports: [
     DatabaseModule,
     AuthModule,
     UserModule,
+    TopicModule
   ],
   controllers: [
     AppController

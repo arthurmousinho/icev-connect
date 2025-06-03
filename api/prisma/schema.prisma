@@ -35,6 +35,7 @@ model Post {
   title       String
   description String
   content     String
+  slug        String @unique
 
   topics Topic[]
 
@@ -51,6 +52,7 @@ model Topic {
   id String @id @default(cuid())
 
   title String @unique
+  slug  String @unique
   posts Post[]
 
   createdAt DateTime @default(now()) @map("created_at")
