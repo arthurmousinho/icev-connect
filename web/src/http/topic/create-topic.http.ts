@@ -1,17 +1,16 @@
 import { api } from "@/config/api.config";
 
 type Payload = {
-    email: string;
-    password: string;
+   title: string;
 }
 
 type Response = {
     accessToken: string;
 }
 
-export async function adminLoginRequest(payload: Payload) {
+export async function createTopicRequest(payload: Payload) {
     const result = await api.post(
-        'auth/login',
+        'topics',
         { json: payload }
     ).json<Response>();
 

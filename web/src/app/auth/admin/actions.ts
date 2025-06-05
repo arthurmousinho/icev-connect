@@ -14,12 +14,12 @@ export async function adminLoginAction(data: Params) {
     try {
         const cookiesData = await cookies();
 
-        const { token } = await adminLoginRequest({
+        const { accessToken } = await adminLoginRequest({
             email: data.email,
             password: data.password
         });
 
-        cookiesData.set(AUTH_TOKEN_KEY, token, {
+        cookiesData.set(AUTH_TOKEN_KEY, accessToken, {
             path: '/',
             maxAge: 60 * 60 * 24 * 7, // 24 hours
         });

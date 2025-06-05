@@ -37,6 +37,9 @@ export class TopicService {
                         posts: true
                     }
                 }
+            },
+            orderBy: {
+                createdAt: 'desc'
             }
         });
 
