@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, HttpCode, NotFoundException, Param, Post, UseGuards } from "@nestjs/common";
 import { TopicService } from "./topic.service";
 import { CreateTopicDTO } from "./dtos/create-topic.dto";
 import { AuthGuard } from "@nestjs/passport";
@@ -12,6 +12,7 @@ export class TopicController {
     ) { }
 
     @Post()
+    @HttpCode(201)
     public async create(@Body() body: CreateTopicDTO) {
         const data = await this.topicService.create({
             title: body.title
@@ -21,10 +22,28 @@ export class TopicController {
     }
 
     @Post('all')
+    @HttpCode(200)
     public async findAll() {
         const data = await this.topicService.findAll();
 
         return { data };
+    }
+
+    @Post(':slug')
+    public async findBySlug(@Param('slug') slug: string) {
+        const data = await this.topicService.findBySlug(slug);
+
+        if (!data) {
+            throw new NotFoundException('Tópico não encontrado.');
+        }
+
+        return { data };
+    }
+
+    @Delete(':id')
+    @HttpCode(204)
+    public async deleteById(@Param('id') id: string) {
+        await this.topicService.deleteById(id);
     }
 
 }

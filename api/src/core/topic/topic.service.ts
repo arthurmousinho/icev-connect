@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from "@nestjs/common";
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "src/infra/database/prisma.service";
 import { generateSlug } from "src/utils/generate-slug.util";
 import type { CreateTopicDTO } from "./dtos/create-topic.dto";
@@ -13,14 +13,10 @@ export class TopicService {
     public async create(data: CreateTopicDTO) {
         const topicSlug = generateSlug(data.title)
 
-        const topicExistsWithSlug = await this.prismaService.topic.findUnique({
-            where: {
-                slug: topicSlug
-            }
-        });
+        const topicWithSlug = await this.findBySlug(topicSlug);
 
-        if (topicExistsWithSlug) {
-            throw new ConflictException('Conflito ao gerar o slug do tópico, tente outro título.')
+        if (topicWithSlug) {
+            throw new ConflictException('Já existe um tópico com esse slug, tente mudar o título do tópico.')
         }
 
         const topicCreated = await this.prismaService.topic.create({
@@ -43,12 +39,46 @@ export class TopicService {
                 }
             }
         });
-        
+
         return topics.map(topic => ({
             ...topic,
             postsCount: topic._count.posts,
             _count: undefined
         }));
+    }
+
+    public async findBySlug(slug: string) {
+        const topic = await this.prismaService.topic.findUnique({
+            where: {
+                slug
+            }
+        });
+
+        return topic;
+    }
+
+    public async findById(id: string) {
+        const topic = await this.prismaService.topic.findUnique({
+            where: {
+                id
+            }
+        });
+
+        return topic;
+    }
+
+    public async deleteById(id: string) {
+        const topic = await this.findById(id)
+
+        if (!topic) {
+            throw new NotFoundException('Tópico não encontrado.')
+        }
+
+        await this.prismaService.topic.delete({
+            where: {
+                id
+            }
+        });
     }
 
 }
