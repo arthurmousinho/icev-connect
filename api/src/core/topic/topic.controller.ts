@@ -20,4 +20,11 @@ export class TopicController {
         return { data };
     }
 
+    @Post('all')
+    public async findAll() {
+        const data = await this.topicService.findAll();
+
+        return { data };
+    }
+
 }
