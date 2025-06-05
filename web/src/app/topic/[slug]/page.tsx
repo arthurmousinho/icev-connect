@@ -1,7 +1,7 @@
 import { ArticleCard } from "@/components/article-card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { ArrowDown, ArrowLeft, Gamepad2, Heart } from "lucide-react";
+import { ArrowDown } from "lucide-react";
 import { TopicHeader } from "./topic-header";
 import { Header } from "@/components/header";
 

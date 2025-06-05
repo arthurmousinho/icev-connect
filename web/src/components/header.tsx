@@ -1,4 +1,4 @@
-import { Feather, Heart, Home, Presentation, Search } from "lucide-react";
+import { Feather, Heart, Home, LetterText, TextSearch } from "lucide-react";
 import { Logo } from "./logo";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -7,9 +7,10 @@ import { ProfileButton } from "./profile-button";
 
 const links = [
     { href: "/", label: "Início", icon: <Home size={20} /> },
-    { href: "/events", label: "Pesquisar", icon: <Search size={20} /> },
-    { href: "/about", label: "Escrever", icon: <Feather size={20} /> },
-    { href: "/contact", label: "Favoritos", icon: <Heart size={20} /> },
+    { href: "/feed", label: "Feed", icon: <LetterText size={20} /> },
+    { href: "/search", label: "Pesquisar", icon: <TextSearch size={20} /> },
+    { href: "/write", label: "Escrever", icon: <Feather size={20} /> },
+    { href: "/favorites", label: "Favoritos", icon: <Heart size={20} /> },
 ]
 
 export function Header() {
