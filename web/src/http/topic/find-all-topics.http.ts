@@ -1,3 +1,4 @@
+import type { TopicIcon } from "@/components/topic-button";
 import { api } from "@/config/api.config";
 
 type Response = {
@@ -8,6 +9,7 @@ type Response = {
         createdAt: string;
         updatedAt: string;
         postsCount: number;
+        icon: TopicIcon
     }[]
 }
 

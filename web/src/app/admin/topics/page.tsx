@@ -5,6 +5,7 @@ import { Paginator } from "@/components/paginator";
 import { TopicSlugBadge } from "./topic-slug-badge";
 import { CreateTopicDialog } from "./create-topic-dialog";
 import { findAllTopicsRequest } from "@/http/topic/find-all-topics.http";
+import { TopicButton } from "@/components/topic-button";
 
 type TopicsPageProps = {
     searchParams: Promise<{ [key: string]: string | undefined }>;
@@ -41,7 +42,12 @@ export default async function TopicsPage({ searchParams }: TopicsPageProps) {
                         {data.map(topic => (
                             <TableRow key={topic.id}>
                                 <TableCell className="flex items-center gap-2">
-                                    {topic.title}
+                                    <TopicButton
+                                        title={topic.title}
+                                        isActive={false}
+                                        slug={topic.slug}
+                                        icon={topic.icon}
+                                    />
                                 </TableCell>
                                 <TableCell>
                                     <TopicSlugBadge slug={topic.slug} />

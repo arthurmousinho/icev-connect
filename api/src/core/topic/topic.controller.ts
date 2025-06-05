@@ -15,7 +15,8 @@ export class TopicController {
     @HttpCode(201)
     public async create(@Body() body: CreateTopicDTO) {
         const data = await this.topicService.create({
-            title: body.title
+            title: body.title,
+            icon: body.icon
         });
 
         return { data };

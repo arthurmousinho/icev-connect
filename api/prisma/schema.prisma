@@ -51,14 +51,38 @@ model Post {
 model Topic {
   id String @id @default(cuid())
 
-  title String @unique
-  slug  String @unique
+  title String    @unique
+  slug  String    @unique
+  icon  TopicIcon @default(DEFAULT)
+
   posts Post[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("topics")
+}
+
+enum TopicIcon {
+  DEFAULT
+  ALIGN_LEFT
+  BOT
+  BRACES
+  CPU
+  DATABASE
+  DATABASE_ZAP
+  ETHERNET_PORT
+  FILE_TEXT
+  GAMEPAD_2
+  GLOBE
+  LAYERS
+  LIST_CHECKS
+  MICROCHIP
+  MONITOR
+  NETWORK
+  SMARTPHONE
+
+  @@map("topic_icon")
 }
 
 enum UserRole {

@@ -6,6 +6,7 @@ import { ArrowRight } from "lucide-react";
 import { AlignLeft, Bot, Braces, Cpu, Database, DatabaseZap, EthernetPort, FileText, Gamepad2, Globe, Layers, ListChecks, Microchip, Monitor, Network, Smartphone } from "lucide-react"
 import { TopicButton } from "@/components/topic-button";
 import { Header } from "@/components/header";
+import { findAllTopicsRequest } from "@/http/topic/find-all-topics.http";
 
 const topics = [
     {
@@ -106,19 +107,21 @@ const topics = [
     }
 ]
 
-export default function HomePage() {
+export default async function HomePage() {
+    const { data } = await findAllTopicsRequest();
+
     return (
         <main className="w-full flex flex-col gap-20 justify-center items-center pb-20">
             <Header />
             <Hero />
             <div className="w-full max-w-[1200px] flex flex-row items-start justify-center gap-10">
                 <aside className="flex flex-col gap-4 sticky top-20">
-                    {topics.map((topic, index) => (
+                    {data.map((topic, index) => (
                         <TopicButton
                             key={index}
                             title={topic.title}
-                            href={topic.href}
-                            isActive={topic.isActive}
+                            slug={topic.slug}
+                            isActive={false}
                             icon={topic.icon}
                         />
                     ))}

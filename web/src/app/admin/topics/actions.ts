@@ -1,11 +1,13 @@
 'use server'
 
+import type { TopicIcon } from '@/components/topic-button';
 import { createTopicRequest } from '@/http/topic/create-topic.http';
 import { HTTPError } from 'ky';
 import { revalidateTag } from 'next/cache';
 
 type Params = {
     title: string;
+    icon: TopicIcon
 }
 
 export async function createTopicAction(data: Params) {

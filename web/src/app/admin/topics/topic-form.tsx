@@ -18,13 +18,23 @@ import { TopicSlugBadge } from "./topic-slug-badge";
 import { generateSlug } from "@/lib/utils";
 import { createTopicAction } from "./actions";
 import { toast } from "sonner";
+import { TopicIcon, topicIconMap } from "@/components/topic-button";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
 
 const loginSchema = z.object({
     title: z
         .string({ message: 'Título é obrigatório' })
         .trim()
         .min(6, { message: 'O título deve ter pelo menos 6 caracteres' })
-        .max(255, { message: 'O título deve ter no máximo 255 caracteres' })
+        .max(255, { message: 'O título deve ter no máximo 255 caracteres' }),
+    icon: z
+        .enum(Object.keys(TopicIcon) as [TopicIcon, ...TopicIcon[]], { message: 'Ícone é obrigatório' }),
 })
 
 type TopicFormValues = z.infer<typeof loginSchema>;
@@ -41,7 +51,8 @@ export function TopicForm({ data, isUpdating = false }: TopicFormProps) {
     const form = useForm<z.infer<typeof loginSchema>>({
         resolver: zodResolver(loginSchema),
         defaultValues: {
-            title: data?.title ?? ''
+            title: data?.title ?? '',
+            icon: data?.icon ?? TopicIcon.DEFAULT
         }
     })
 
@@ -65,9 +76,17 @@ export function TopicForm({ data, isUpdating = false }: TopicFormProps) {
                     name="title"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>
-                                Título
-                            </FormLabel>
+                            <header className="flex flex-row items-center justify-between">
+                                <FormLabel>
+                                    Título
+                                </FormLabel>
+                                <div className="flex flex-row items-center gap-1">
+                                    <FormLabel>
+                                        Slug:
+                                    </FormLabel>
+                                    <TopicSlugBadge slug={generateSlug(form.watch('title'))} />
+                                </div>
+                            </header>
                             <FormControl>
                                 <Input
                                     placeholder="Digite o título do tópico"
@@ -79,12 +98,33 @@ export function TopicForm({ data, isUpdating = false }: TopicFormProps) {
                         </FormItem>
                     )}
                 />
-                <div className="space-y-2">
-                    <FormLabel>
-                        Slug:
-                    </FormLabel>
-                    <TopicSlugBadge slug={generateSlug(form.watch('title'))} />
-                </div>
+                <FormField
+                    control={form.control}
+                    name="icon"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>
+                                Ícone
+                            </FormLabel>
+                            <FormControl>
+                                <Select onValueChange={(value) => field.onChange(value)}>
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Ícone do tópico" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {Object.values(TopicIcon).map((icon) => (
+                                            <SelectItem key={icon} value={icon}>
+                                                {topicIconMap[icon]}
+                                                {icon}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
                 <Button variant="default" type="submit" className="w-full" isLoading={isLoading}>
                     Salvar
                 </Button>

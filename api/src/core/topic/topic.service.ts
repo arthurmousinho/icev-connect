@@ -22,7 +22,8 @@ export class TopicService {
         const topicCreated = await this.prismaService.topic.create({
             data: {
                 title: data.title,
-                slug: topicSlug
+                slug: topicSlug,
+                icon: data.icon
             }
         });
 
