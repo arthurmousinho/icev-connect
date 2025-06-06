@@ -1,8 +1,9 @@
-import { Body, Controller, Post, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, NotFoundException, Param, Post, Req, UseGuards } from "@nestjs/common";
 import { ArticleService } from "./article.service";
 import { CreateArticleDTO } from "./dtos/create-article.dto";
 import { AuthGuard } from "@nestjs/passport";
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('articles')
 export class ArticlesController {
 
@@ -11,7 +12,6 @@ export class ArticlesController {
     ) { }
 
     @Post()
-    @UseGuards(AuthGuard('jwt'))
     public async create(@Body() body: CreateArticleDTO, @Req() req: any) {
         const data = await this.articleService.create({
             title: body.title,
@@ -21,6 +21,12 @@ export class ArticlesController {
             authorId: req.user.id
         });
 
+        return { data };
+    }
+
+    @Get(':slug')
+    public async findAll(@Param(':slug') slug: string) {
+        const data = await this.articleService.findBySlug(slug);
         return { data };
     }
 

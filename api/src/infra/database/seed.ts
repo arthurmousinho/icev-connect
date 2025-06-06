@@ -10,7 +10,7 @@ async function main() {
         data: {
             email: process.env.ADMIN_EMAIL ?? '',
             name: process.env.ADMIN_NAME ?? '',
-            username: process.env.ADMIN_EMAIL ?? '',
+            username: process.env.ADMIN_USERNAME ?? '',
             avatarUrl: 'https://avatar.vercel.sh/icevconnect',
             hashedPassword: await hash(process.env.ADMIN_PASSWORD ?? '', 10),
             provider: 'CREDENTIALS',

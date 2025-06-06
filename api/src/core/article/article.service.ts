@@ -4,6 +4,7 @@ import { generateSlug } from "src/shared/utils/generate-slug.util";
 import { sanitizeMarkown } from "src/shared/utils/mardown-sanitizer.util";
 import { TopicService } from "../topic/topic.service";
 import type { CreateArticleDTO } from "./dtos/create-article.dto";
+import type { FindMethodOptions } from "src/shared/types/find-method-options.type";
 
 @Injectable()
 export class ArticleService {
@@ -13,6 +14,34 @@ export class ArticleService {
         private readonly topicService: TopicService
     ) { }
 
+    public async findBySlug(slug: string, options?: FindMethodOptions) {
+        const article = await this.prismaService.article.findFirst({
+            where: { slug },
+            include: {
+                topic: {
+                    select: {
+                        slug: true,
+                        icon: true,
+                        title: true
+                    }
+                },
+                author: {
+                    select: {
+                        avatarUrl: true,
+                        name: true,
+                        username: true
+                    }
+                }
+            }
+        });
+
+        if (!article && options?.throwError) {
+            throw new NotFoundException('Artigo não encontrado.');
+        }
+
+        return article;
+    }
+
     public async create(data: CreateArticleDTO) {
         const topic = await this.topicService.findById(data.topicId);
 
@@ -20,8 +49,12 @@ export class ArticleService {
             throw new NotFoundException("Tópico não encontrado.");
         }
 
-        const articleSlug = generateSlug(data.title)
-        const articleWithSlug = await this.findBySlug(articleSlug);
+        const articleSlug = generateSlug(data.title);
+
+        const articleWithSlug = await this.findBySlug(
+            articleSlug,
+            { throwError: false }
+        );
 
         if (articleWithSlug) {
             throw new Error("Já existe um artigo com esse slug, tente mudar o título do artigo.");
@@ -39,14 +72,6 @@ export class ArticleService {
         });
 
         return articleCreated;
-    }
-
-    public async findBySlug(slug: string) {
-        const article = await this.prismaService.article.findUnique({
-            where: { slug }
-        });
-
-        return article;
     }
 
 }
