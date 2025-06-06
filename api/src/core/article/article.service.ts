@@ -14,7 +14,12 @@ export class ArticleService {
         private readonly topicService: TopicService
     ) { }
 
-    public async findBySlug(slug: string, options?: FindMethodOptions) {
+    public async findBySlug(
+        slug: string,
+        options: FindMethodOptions = {
+            throwError: true
+        }
+    ) {
         const article = await this.prismaService.article.findFirst({
             where: { slug },
             include: {
@@ -68,6 +73,39 @@ export class ArticleService {
         });
 
         return articles;
+    }
+
+    public async findAllByTopicSlug(topicSlug: string) {
+        const topic = await this.topicService.findBySlug(topicSlug);
+
+        const articlesByTopicSlug = await this.prismaService.article.findMany({
+            where: {
+                topicId: topic?.id
+            },
+            select: {
+                id: true,
+                title: true,
+                slug: true,
+                description: true,
+                createdAt: true,
+                updatedAt: true,
+                author: {
+                    select: {
+                        email: true,
+                        name: true,
+                        avatarUrl: true
+                    }
+                },
+                topic: {
+                    select: {
+                        icon: true,
+                        title: true
+                    }
+                }
+            }
+        })
+
+        return articlesByTopicSlug;
     }
 
     public async create(data: CreateArticleDTO) {

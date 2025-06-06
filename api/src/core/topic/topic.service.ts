@@ -2,6 +2,7 @@ import { ConflictException, Injectable, NotFoundException } from "@nestjs/common
 import { PrismaService } from "src/infra/database/prisma.service";
 import { generateSlug } from "src/shared/utils/generate-slug.util";
 import type { CreateTopicDTO } from "./dtos/create-topic.dto";
+import type { FindMethodOptions } from "src/shared/types/find-method-options.type";
 
 @Injectable()
 export class TopicService {
@@ -13,7 +14,10 @@ export class TopicService {
     public async create(data: CreateTopicDTO) {
         const topicSlug = generateSlug(data.title)
 
-        const topicWithSlug = await this.findBySlug(topicSlug);
+        const topicWithSlug = await this.findBySlug(
+            topicSlug,
+            { throwError: false }
+        );
 
         if (topicWithSlug) {
             throw new ConflictException('Já existe um tópico com esse slug, tente mudar o título do tópico.')
@@ -51,12 +55,21 @@ export class TopicService {
         }));
     }
 
-    public async findBySlug(slug: string) {
+    public async findBySlug(
+        slug: string,
+        options: FindMethodOptions = {
+            throwError: true
+        }
+    ) {
         const topic = await this.prismaService.topic.findUnique({
             where: {
                 slug
             }
         });
+
+        if (!topic && !options?.throwError) {
+            throw new NotFoundException('Tópico não encontrado.')
+        }
 
         return topic;
     }

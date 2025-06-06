@@ -30,6 +30,12 @@ export class ArticlesController {
         return { data };
     }
 
+    @Post('topic/:topicSlug')
+    public async findAllByTopic(@Param('topicSlug') topicSlug: string) {
+        const data = await this.articleService.findAllByTopicSlug(topicSlug);
+        return { data };
+    }
+
     @Get(':slug')
     public async findBySlug(@Param(':slug') slug: string) {
         const data = await this.articleService.findBySlug(slug);

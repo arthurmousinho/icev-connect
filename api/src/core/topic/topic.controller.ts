@@ -33,11 +33,6 @@ export class TopicController {
     @Post(':slug')
     public async findBySlug(@Param('slug') slug: string) {
         const data = await this.topicService.findBySlug(slug);
-
-        if (!data) {
-            throw new NotFoundException('Tópico não encontrado.');
-        }
-
         return { data };
     }
 
