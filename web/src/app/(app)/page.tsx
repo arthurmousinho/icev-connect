@@ -108,6 +108,7 @@ const topics = [
 ]
 
 export default async function HomePage() {
+    
     const { data } = await findAllTopicsRequest();
 
     return (

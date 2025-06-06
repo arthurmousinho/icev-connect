@@ -1,8 +1,26 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { format } from 'date-fns';
+import { ptBR } from "date-fns/locale";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
+}
+
+export function getInitials(name: string) {
+  if (!name) return '';
+
+  const names = name.trim().split(' ').filter(n => n.length > 0);
+
+  if (names.length === 0) {
+    return ''
+  };
+
+  if (names.length === 1) {
+    return names[0].charAt(0).toUpperCase()
+  };
+
+  return `${names[0].charAt(0)}${names[names.length - 1].charAt(0)}`.toUpperCase();
 }
 
 export function generateSlug(value: string) {
@@ -15,4 +33,12 @@ export function generateSlug(value: string) {
     .replace(/[^\w-]+/g, '') // remove all non-word chars except hyphens
     .replace(/_/g, '-') // replace underscores with hyphens
     .replace(/--+/g, '-'); // replace multiple hyphens with single hyphen
+}
+
+export function formatDate(date: string) {
+  return format(
+    new Date(date),
+    "d 'de' MMMM, yyyy",
+    { locale: ptBR }
+  );
 }

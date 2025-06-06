@@ -112,12 +112,16 @@ export function TopicForm({ data, isUpdating = false }: TopicFormProps) {
                                         <SelectValue placeholder="Ícone do tópico" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        {Object.values(TopicIcon).map((icon) => (
-                                            <SelectItem key={icon} value={icon}>
-                                                {topicIconMap[icon]}
-                                                {icon}
-                                            </SelectItem>
-                                        ))}
+                                        {Object.values(TopicIcon).map((icon) => {
+                                            const TopicIcon = topicIconMap[icon];
+
+                                            return (
+                                                <SelectItem key={icon} value={icon}>
+                                                    <TopicIcon />
+                                                    {icon}
+                                                </SelectItem>
+                                            )
+                                        })}
                                     </SelectContent>
                                 </Select>
                             </FormControl>

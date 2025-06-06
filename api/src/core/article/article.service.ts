@@ -91,7 +91,6 @@ export class ArticleService {
                 updatedAt: true,
                 author: {
                     select: {
-                        email: true,
                         name: true,
                         avatarUrl: true
                     }

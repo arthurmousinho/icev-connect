@@ -67,7 +67,7 @@ export class TopicService {
             }
         });
 
-        if (!topic && !options?.throwError) {
+        if (!topic && options?.throwError) {
             throw new NotFoundException('Tópico não encontrado.')
         }
 

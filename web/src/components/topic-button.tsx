@@ -23,24 +23,24 @@ export enum TopicIcon {
     SMARTPHONE = 'SMARTPHONE',
 }
 
-export const topicIconMap: Record<TopicIcon, React.ReactNode> = {
-    DEFAULT: <ArrowUpRight />,
-    ALIGN_LEFT: <AlignLeft />,
-    BOT: <Bot />,
-    BRACES: <Braces />,
-    CPU: <Cpu />,
-    DATABASE: <Database />,
-    DATABASE_ZAP: <DatabaseZap />,
-    ETHERNET_PORT: <EthernetPort />,
-    FILE_TEXT: <FileText />,
-    GAMEPAD_2: <Gamepad2 />,
-    GLOBE: <Globe />,
-    LAYERS: <Layers />,
-    LIST_CHECKS: <ListChecks />,
-    MICROCHIP: <Microchip />,
-    MONITOR: <Monitor />,
-    NETWORK: <Network />,
-    SMARTPHONE: <Smartphone />,
+export const topicIconMap: Record<TopicIcon, React.ElementType> = {
+    DEFAULT: ArrowUpRight,
+    ALIGN_LEFT: AlignLeft,
+    BOT: Bot,
+    BRACES: Braces,
+    CPU: Cpu,
+    DATABASE: Database,
+    DATABASE_ZAP: DatabaseZap,
+    ETHERNET_PORT: EthernetPort,
+    FILE_TEXT: FileText,
+    GAMEPAD_2: Gamepad2,
+    GLOBE: Globe,
+    LAYERS: Layers,
+    LIST_CHECKS: ListChecks,
+    MICROCHIP: Microchip,
+    MONITOR: Monitor,
+    NETWORK: Network,
+    SMARTPHONE: Smartphone,
 };
 
 type TopicButtonProps = {
@@ -57,6 +57,8 @@ export function TopicButton({
     icon = TopicIcon.DEFAULT,
 }: TopicButtonProps) {
 
+    const TopicIcon = topicIconMap[icon];
+
     return (
         <Link
             href={`/topic/${slug}`}
@@ -64,7 +66,7 @@ export function TopicButton({
                 + " w-full flex justify-start" + (isActive ? " bg-secondary text-secondary-foreground" : "")
             }
         >
-            {topicIconMap[icon]}
+            <TopicIcon />
             {title}
         </Link>
     )

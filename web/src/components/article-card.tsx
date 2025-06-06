@@ -1,23 +1,47 @@
 import Link from "next/link";
 import { UserBadge } from "./user-badge";
 import { LikesBadge } from "./likes-badge";
+import { formatDate } from "@/lib/utils";
 
-export function ArticleCard() {
+type ArticleCardProps = {
+    title: string;
+    slug: string;
+    description: string;
+    authorName: string;
+    authorAvatarUrl: string;
+    topicTitle: string;
+    createdAt: string;
+}
+
+export function ArticleCard({
+    title,
+    slug,
+    description,
+    authorName,
+    authorAvatarUrl,
+    topicTitle,
+    createdAt,
+}: ArticleCardProps) {
     return (
-        <Link href="/article/article-slug-will-be-here" className="flex flex-col gap-3 group">
+        <Link href={`/article/${slug}`} className="flex flex-col gap-3 group">
             <p className="text-sm font-semibold text-muted-foreground">
-                Programação Web
+                {topicTitle}
             </p>
             <h3 className="text-2xl font-semibold text-balance group-hover:underline">
-                Getting Started with Modern Web Development: A Complete Guide
+                {title}
             </h3>
             <p className="text-muted-foreground line-clamp-3 leading-relaxed">
-                Dive into the fundamentals of modern web development. Learn about essential tools, frameworks, and best practices that will help you build robust and scalable web applications in today's fast-paced development environment.
+                {description}
             </p>
             <footer className="mt-3 flex flex-row items-center justify-between">
-                <div className="flex items-center gap-2">
-                    <UserBadge />
-                    <span className="text-muted-foreground">on March 15, 2024</span>
+                <div className="flex items-center gap-1">
+                    <UserBadge
+                        name={authorName}
+                        avatarUrl={authorAvatarUrl}
+                    />
+                    <span className="text-muted-foreground">
+                        em {formatDate(createdAt)}
+                    </span>
                 </div>
                 <LikesBadge count={42} />
             </footer>
