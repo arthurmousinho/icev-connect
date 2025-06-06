@@ -1,3 +1,4 @@
+import type { TopicIcon } from "@/components/topic-button";
 import { api } from "@/config/api.config";
 
 type Response = {
@@ -8,10 +9,11 @@ type Response = {
         description: string;
         author: {
             name: string;
+            email: string;
             avatarUrl: string;
         },
         topic: {
-            id: string;
+            icon: TopicIcon;
             title: string;
         }
         createdAt: string;
@@ -19,7 +21,7 @@ type Response = {
     }[]
 }
 
-export async function findAllArticlesByTopicSlugRequest(topicSlug: string) {
-    const result = await api.post(`articles/topic/${topicSlug}`).json<Response>();
+export async function findAllArticlesRequest() {
+    const result = await api.post('articles/all').json<Response>();
     return result;
 }

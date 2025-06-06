@@ -6,7 +6,7 @@ import { TopicHeader } from "./topic-header";
 import { Header } from "@/components/header";
 import { TopicIcon } from "@/components/topic-button";
 import { findTopicBySlugRequest } from "@/http/topic/find-topic-by-slug.http";
-import { findAllArticlesByTopicSlug } from "@/http/articles/find-all-articles-by-topic-slug.http";
+import { findAllArticlesByTopicSlugRequest } from "@/http/articles/find-all-articles-by-topic-slug.http";
 
 type TopicPageProps = {
     params: Promise<{ slug: string }>;
@@ -16,7 +16,7 @@ export default async function TopicPage({ params }: TopicPageProps) {
 
     const { slug } = await params;
     const { data: topicData } = await findTopicBySlugRequest(slug);
-    const { data: topicArticles } = await findAllArticlesByTopicSlug(slug);
+    const { data: topicArticles } = await findAllArticlesByTopicSlugRequest(slug);
 
     return (
         <div className="flex flex-col h-dvh justify-top items-center gap-10">

@@ -23,6 +23,8 @@ import {
     LetterText,
     Server,
     X,
+    OctagonAlert,
+    Mail,
 } from "lucide-react"
 import { Logo } from "@/components/logo"
 
@@ -34,6 +36,13 @@ const sidebarConfig = [
             { label: "Usuários", href: "/admin/users", icon: UsersRound },
             { label: "Tópicos", href: "/admin/topics", icon: Pin },
             { label: "Artigos", href: "/admin/articles", icon: LetterText },
+        ],
+    },
+    {
+        label: "Suporte",
+        items: [
+            { label: "Denúncias", href: "/admin", icon: OctagonAlert },
+            { label: "Mensagens", href: "/admin/users", icon: Mail },
         ],
     },
     {
