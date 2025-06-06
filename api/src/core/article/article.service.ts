@@ -42,6 +42,34 @@ export class ArticleService {
         return article;
     }
 
+    public async findAll() {
+        const articles = await this.prismaService.article.findMany({
+            select: {
+                id: true,
+                title: true,
+                slug: true,
+                description: true,
+                createdAt: true,
+                updatedAt: true,
+                author: {
+                    select: {
+                        email: true,
+                        name: true,
+                        avatarUrl: true
+                    }
+                },
+                topic: {
+                    select: {
+                        icon: true,
+                        title: true
+                    }
+                }
+            }
+        });
+
+        return articles;
+    }
+
     public async create(data: CreateArticleDTO) {
         const topic = await this.topicService.findById(data.topicId);
 

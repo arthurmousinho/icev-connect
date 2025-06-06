@@ -24,8 +24,14 @@ export class ArticlesController {
         return { data };
     }
 
+    @Post('all')
+    public async findAll() {
+        const data = await this.articleService.findAll();
+        return { data };
+    }
+
     @Get(':slug')
-    public async findAll(@Param(':slug') slug: string) {
+    public async findBySlug(@Param(':slug') slug: string) {
         const data = await this.articleService.findBySlug(slug);
         return { data };
     }
