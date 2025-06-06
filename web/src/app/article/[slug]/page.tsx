@@ -120,7 +120,6 @@ Modern web development is a dynamic and rapidly evolving field. With the right c
 `;
 
 
-
 export default function ArticlePage() {
     return (
         <div className="flex flex-col h-dvh justify-top items-center gap-10">
