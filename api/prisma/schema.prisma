@@ -21,7 +21,7 @@ model User {
   isActive Boolean      @default(true) @map("is_active")
   provider AuthProvider @default(GOOGLE)
 
-  posts Post[]
+  articles Article[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -29,7 +29,7 @@ model User {
   @@map("users")
 }
 
-model Post {
+model Article {
   id String @id @default(cuid())
 
   title       String
@@ -45,7 +45,7 @@ model Post {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@map("posts")
+  @@map("articles")
 }
 
 model Topic {
@@ -55,7 +55,7 @@ model Topic {
   slug  String    @unique
   icon  TopicIcon @default(DEFAULT)
 
-  posts Post[]
+  articles Article[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
