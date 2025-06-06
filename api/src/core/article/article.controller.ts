@@ -16,7 +16,7 @@ export class ArticlesController {
         const data = await this.articleService.create({
             title: body.title,
             description: body.description,
-            topicsId: body.topicsId,
+            topicId: body.topicId,
             content: body.content,
             authorId: req.user.id
         });

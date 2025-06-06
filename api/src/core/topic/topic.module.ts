@@ -14,7 +14,7 @@ import { TopicService } from "./topic.service";
         TopicService
     ],
     exports: [
-
+        TopicService
     ]
 })
 export class TopicModule { }
