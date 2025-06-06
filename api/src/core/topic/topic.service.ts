@@ -1,6 +1,6 @@
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "src/infra/database/prisma.service";
-import { generateSlug } from "src/utils/generate-slug.util";
+import { generateSlug } from "src/shared/utils/generate-slug.util";
 import type { CreateTopicDTO } from "./dtos/create-topic.dto";
 
 @Injectable()
@@ -35,7 +35,7 @@ export class TopicService {
             include: {
                 _count: {
                     select: {
-                        posts: true
+                        articles: true
                     }
                 }
             },
@@ -46,7 +46,7 @@ export class TopicService {
 
         return topics.map(topic => ({
             ...topic,
-            postsCount: topic._count.posts,
+            articlesCount: topic._count.articles,
             _count: undefined
         }));
     }

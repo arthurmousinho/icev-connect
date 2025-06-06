@@ -37,7 +37,8 @@ model Article {
   content     String
   slug        String @unique
 
-  topics Topic[]
+  topic   Topic  @relation(fields: [topicId], references: [id])
+  topicId String @map("topic_id")
 
   author   User   @relation(fields: [authorId], references: [id])
   authorId String @map("author_id")
