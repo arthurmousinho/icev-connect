@@ -7,7 +7,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { LogOut, UserRound } from "lucide-react";
+import { LogOut, Settings, UserRound } from "lucide-react";
 import { getUserProfileRequest } from "@/http/user/get-user-profile.http";
 import { getInitials } from "@/lib/utils";
 
@@ -38,9 +38,15 @@ export async function ProfileButton() {
                 </div>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                    <Link href="/me" className="flex flex-row items-center gap-2">
+                    <Link href={`/user/${data.username}`} className="flex flex-row items-center gap-2">
                         <UserRound className="size-4" />
                         <span>Meu Perfil</span>
+                    </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                    <Link href="/settings" className="flex flex-row items-center gap-2">
+                        <Settings className="size-4" />
+                        <span>Configurações</span>
                     </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>

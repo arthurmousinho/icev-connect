@@ -6,6 +6,7 @@ type Response = {
         id: string;
         email: string;
         name: string;
+        username: string;
         avatarUrl: string;
         role: UserRole;
         isActive: boolean;
