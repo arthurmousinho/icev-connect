@@ -42,9 +42,9 @@ export class ArticlesController {
     }
 
     @HttpCode(200)
-    @Post('author')
-    public async findAllByAuthor(@Req() req: any) {
-        const data = await this.articleService.findAllByAuthorId(req.user.id);
+    @Post('user/:username')
+    public async findAllByUsername(@Param('username') username: string) {
+        const data = await this.articleService.findAllByUsername(username);
         return { data };
     }
 

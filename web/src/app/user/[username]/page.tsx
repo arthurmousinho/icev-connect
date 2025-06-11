@@ -5,6 +5,10 @@ import { Separator } from "@/components/ui/separator";
 import { ArrowDown } from "lucide-react";
 import { Bot, Braces, Globe, ListChecks, Monitor } from "lucide-react"
 import { TopicButton } from "@/components/topic-button";
+import { findAllArticlesByUsernameRequest } from "@/http/articles/find-all-articles-by-username.http";
+import { Header } from "@/components/header";
+import { findUserByUsernameRequest } from "@/http/user/find-user-by-username.http";
+import { getInitials } from "@/lib/utils";
 
 const topics = [
     {
@@ -33,50 +37,70 @@ const topics = [
     },
 ]
 
-export default function UserPage() {
+type UserPageProps = {
+    params: Promise<{ username: string }>;
+}
+
+export default async function UserPage({ params }: UserPageProps) {
+
+    const { username } = await params;
+
+    const [
+        { data: userData },
+        { data: userArticles }
+    ] = await Promise.all([
+        findUserByUsernameRequest(username),
+        findAllArticlesByUsernameRequest(username)
+    ]);
+
     return (
-        <div className="flex flex-col h-dvh justify-top items-center mt-10">
+        <div className="flex flex-col h-dvh justify-top items-center gap-10">
+            <Header />
             <div className="w-full max-w-[1200px] flex flex-row items-start justify-center gap-10">
                 <header className="flex flex-col items-center justify-between gap-4 sticky top-20 w-[500px]">
                     <div className="flex flex-col justify-start gap-2 w-full">
                         <Avatar className="size-[100px] rounded-md">
-                            <AvatarFallback>JD</AvatarFallback>
-                            <AvatarImage src="https://github.com/arthurmousinho.png" />
+                            <AvatarFallback>
+                                {getInitials(userData.name)}
+                            </AvatarFallback>
+                            <AvatarImage src={userData.avatarUrl} />
                         </Avatar>
                         <h1 className="font-bold text-2xl">
-                            Arthur Mousinho
+                            {userData.name}
                         </h1>
                         <span className="text-muted-foreground text-sm italic">
-                            @arthurmousinho
+                            @{userData.username}
                         </span>
                     </div>
-                    <p className="text-muted-foreground text-sm leading-relaxed">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem, saepe possimus labore sequi beatae culpa omnis at excepturi rerum asperiores corrupti id, harum ea ex cupiditate aut suscipit nihil accusamus?
-                    </p>
                     <Separator />
                     <h2 className="text-sm text-muted-foreground uppercase w-full">
                         Tópicos de Interesse
                     </h2>
                     <div className="flex flex-col gap-4 w-full">
-                        {topics.map((topic, index) => (
+                        {/* {topics.map((topic, index) => (
                             <TopicButton
                                 key={index}
                                 title={topic.title}
-                                href={topic.href}
-                                isActive={topic.isActive}
                                 icon={topic.icon}
                             />
-                        ))}
+                        ))} */}
                     </div>
                 </header>
                 <div className="flex flex-col w-full pb-10">
-                    <ArticleCard />
-                    <Separator className="my-6" />
-                    <ArticleCard />
-                    <Separator className="my-6" />
-                    <ArticleCard />
-                    <Separator className="my-6" />
-                    <ArticleCard />
+                    {userArticles.map(article => (
+                        <div key={article.id}>
+                            <ArticleCard
+                                title={article.title}
+                                description={article.description}
+                                topicTitle={article.topic.title}
+                                slug={article.slug}
+                                authorAvatarUrl={article.author.avatarUrl}
+                                authorName={article.author.name}
+                                createdAt={article.createdAt}
+                            />
+                            <Separator className="my-6" />
+                        </div>
+                    ))}
                     <footer className="flex justify-end mt-6">
                         <Button variant="secondary">
                             Carregar mais

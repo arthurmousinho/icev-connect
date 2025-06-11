@@ -1,5 +1,5 @@
-import type { TopicIconType } from "@/types/topic";
 import { api } from "@/config/api.config";
+import type { TopicIconType } from "@/types/topic";
 
 type Response = {
     data: {
@@ -21,7 +21,7 @@ type Response = {
     }[]
 }
 
-export async function findAllArticlesRequest() {
-    const result = await api.post('articles/all').json<Response>();
+export async function findAllArticlesByUsernameRequest(username: string) {
+    const result = await api.post(`articles/user/${username}`).json<Response>();
     return result;
 }

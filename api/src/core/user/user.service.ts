@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "src/infra/database/prisma.service";
 import type { CreateUserDTO } from "./dtos/create-user.dto";
+import type { FindMethodOptions } from "src/shared/types/find-method-options.type";
 
 @Injectable()
 export class UserService {
@@ -13,6 +14,29 @@ export class UserService {
         const user = await this.prismaService.user.findUnique({
             where: { id }
         });
+
+        return user;
+    }
+
+    public async findByUsername(
+        username: string,
+        options: FindMethodOptions = {
+            throwError: true
+        }
+    ) {
+        const user = await this.prismaService.user.findUnique({
+            where: { username },
+            select: {
+                id: true,
+                name: true,
+                username: true,
+                avatarUrl: true,
+            }
+        });
+
+        if (!user && options?.throwError) {
+            throw new NotFoundException('Usuário não encontrado');
+        }
 
         return user;
     }
@@ -46,10 +70,8 @@ export class UserService {
         }
 
         return {
-            id: user.id,
-            email: user.email,
-            username: user.username,
-            avatarUrl: user.avatarUrl,
+            ...user,
+            hashedPassword: undefined
         };
     }
 

@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "src/infra/database/prisma.service";
 import { generateSlug } from "src/shared/utils/generate-slug.util";
 import { TopicService } from "../topic/topic.service";
+import { UserService } from "../user/user.service";
 import type { CreateArticleDTO } from "./dtos/create-article.dto";
 import type { FindMethodOptions } from "src/shared/types/find-method-options.type";
 
@@ -10,7 +11,8 @@ export class ArticleService {
 
     constructor(
         private readonly prismaService: PrismaService,
-        private readonly topicService: TopicService
+        private readonly topicService: TopicService,
+        private readonly userService: UserService
     ) { }
 
     public async findBySlug(
@@ -141,9 +143,15 @@ export class ArticleService {
         return articleCreated;
     }
 
-    public async findAllByAuthorId(authorId: string) {
+    public async findAllByUsername(username: string) {
+        await this.userService.findByUsername(username);
+
         const articles = await this.prismaService.article.findMany({
-            where: { authorId },
+            where: {
+                author: {
+                    username
+                }
+            },
             select: {
                 id: true,
                 title: true,
@@ -155,7 +163,8 @@ export class ArticleService {
                     select: {
                         email: true,
                         name: true,
-                        avatarUrl: true
+                        avatarUrl: true,
+                        username: true
                     }
                 },
                 topic: {
@@ -164,11 +173,13 @@ export class ArticleService {
                         title: true
                     }
                 }
+            },
+            orderBy: {
+                createdAt: 'desc'
             }
         });
 
         return articles;
     }
-
 
 }

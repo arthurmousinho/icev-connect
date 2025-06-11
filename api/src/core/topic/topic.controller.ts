@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, HttpCode, NotFoundException, Param, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, HttpCode, Param, Post, UseGuards } from "@nestjs/common";
 import { TopicService } from "./topic.service";
 import { CreateTopicDTO } from "./dtos/create-topic.dto";
 import { AuthGuard } from "@nestjs/passport";
@@ -26,7 +26,6 @@ export class TopicController {
 
     @Post('all')
     @HttpCode(200)
-    @Roles('ADMIN')
     public async findAll() {
         const data = await this.topicService.findAll();
 
