@@ -1,3 +1,5 @@
+'use client'
+
 import {
     Select,
     SelectContent,
@@ -6,18 +8,36 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { findAllTopicsRequest } from "@/http/topic/find-all-topics.http"
+import { useEffect, useState } from "react"
 
-export async function TopicSelect() {
+type TopicSelectProps = {
+    value?: string;
+    onValueChange: (topicId: string) => void
+}
 
-    const { data } = await findAllTopicsRequest();
+export function TopicSelect({ onValueChange, value }: TopicSelectProps) {
+
+    const [topics, setTopics] = useState<{ id: string, title: string }[]>([])
+
+    useEffect(() => {
+        async function loadTopics() {
+            try {
+                const { data } = await findAllTopicsRequest()
+                setTopics(data)
+            } catch (err) {
+                console.error("Erro ao buscar tópicos:", err)
+            }
+        }
+        loadTopics()
+    }, [])
 
     return (
-        <Select>
+        <Select onValueChange={onValueChange} value={value}>
             <SelectTrigger className="w-full border-none shadow-none p-0">
                 <SelectValue placeholder="Selecione o tópico" />
             </SelectTrigger>
             <SelectContent>
-                {data.map((topic) => (
+                {topics?.map((topic) => (
                     <SelectItem
                         key={topic.id}
                         value={topic.id}

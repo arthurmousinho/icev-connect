@@ -1,10 +1,9 @@
 import ky from 'ky';
-import { env } from './env.config';
 import { getCookie } from 'cookies-next'
 import { AUTH_TOKEN_KEY } from './contants.config';
 
 export const api = ky.create({
-    prefixUrl: env.NEXT_PUBLIC_API_URL,
+    prefixUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
     hooks: {
         beforeRequest: [
             async (request) => {
@@ -24,10 +23,7 @@ export const api = ky.create({
                     request.headers.set('Authorization', `Bearer ${token}`)
                 }
             },
-        ],
-        afterResponse: [
-            
-        ],
+        ]
     },
     throwHttpErrors: true,
 })
