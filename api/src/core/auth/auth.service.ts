@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { compare } from 'bcrypt';
 import { UserService } from '../user/user.service';
 import type { LoginWithEmailAndPassswordDTO } from './dtos/login-with-email-password.dto';
+import type { UserRole } from 'generated/prisma';
 
 @Injectable()
 export class AuthService {
@@ -29,12 +30,10 @@ export class AuthService {
         const accessToken = this.signToken({
             userId: userFound.id,
             email: userFound.email,
+            role: userFound.role
         });
 
-        return {
-            accessToken,
-            user: userFound,
-        };
+        return { accessToken };
     }
 
     public async loginWithEmailAndPassword(data: LoginWithEmailAndPassswordDTO) {
@@ -52,18 +51,20 @@ export class AuthService {
             throw new UnauthorizedException('Credenciais inválidas');
         }
 
-        const token = this.signToken({
+        const accessToken = this.signToken({
             userId: user.id,
-            email: user.email
+            email: user.email,
+            role: user.role,
         });
 
-        return { accessToken: token };
+        return { accessToken };
     }
 
-    private signToken(payload: { userId: string, email: string }) {
+    private signToken(payload: { userId: string, email: string, role: UserRole }) {
         return this.jwtService.sign({
             sub: payload.userId,
             email: payload.email,
+            role: payload.role
         });
     }
 
