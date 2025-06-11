@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "src/infra/database/prisma.service";
 import { generateSlug } from "src/shared/utils/generate-slug.util";
-import { sanitizeMarkown } from "src/shared/utils/mardown-sanitizer.util";
 import { TopicService } from "../topic/topic.service";
 import type { CreateArticleDTO } from "./dtos/create-article.dto";
 import type { FindMethodOptions } from "src/shared/types/find-method-options.type";
@@ -91,8 +90,8 @@ export class ArticleService {
                 updatedAt: true,
                 author: {
                     select: {
+                        avatarUrl: true,
                         name: true,
-                        avatarUrl: true
                     }
                 },
                 topic: {
@@ -101,6 +100,9 @@ export class ArticleService {
                         title: true
                     }
                 }
+            },
+            orderBy: {
+                createdAt: 'desc'
             }
         })
 
@@ -129,7 +131,7 @@ export class ArticleService {
             data: {
                 title: data.title,
                 slug: articleSlug,
-                content: sanitizeMarkown(data.content),
+                content: data.content,
                 description: data.description,
                 topicId: data.topicId,
                 authorId: data.authorId

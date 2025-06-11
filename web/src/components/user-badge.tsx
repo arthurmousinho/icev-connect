@@ -13,9 +13,7 @@ export function UserBadge({ name, avatarUrl }: UserBadgeProps) {
                 <AvatarFallback>{getInitials(name)}</AvatarFallback>
                 <AvatarImage src={avatarUrl} />
             </Avatar>
-            <span className="font-medium text-sm">
-                {name}
-            </span>
-        </div >
+            <span className="font-medium text-sm">{name}</span>
+        </div>
     )
 }

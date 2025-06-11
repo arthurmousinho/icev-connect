@@ -1,6 +1,7 @@
 import ky from 'ky';
 import { getCookie } from 'cookies-next'
 import { AUTH_TOKEN_KEY } from './contants.config';
+import { redirect } from 'next/navigation';
 
 export const api = ky.create({
     prefixUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -23,7 +24,14 @@ export const api = ky.create({
                     request.headers.set('Authorization', `Bearer ${token}`)
                 }
             },
-        ]
+        ],
+        afterResponse: [
+            async (request, options, response) => {
+                if (response.status === 401 || response.status === 404) {
+                    redirect('/not-found')
+                }
+            },
+        ],
     },
     throwHttpErrors: true,
 })

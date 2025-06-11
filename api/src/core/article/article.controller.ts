@@ -37,7 +37,7 @@ export class ArticlesController {
     }
 
     @Get(':slug')
-    public async findBySlug(@Param(':slug') slug: string) {
+    public async findBySlug(@Param('slug') slug: string) {
         const data = await this.articleService.findBySlug(slug);
         return { data };
     }
