@@ -42,3 +42,13 @@ export function formatDate(date: string) {
     { locale: ptBR }
   );
 }
+
+export function decodeJwtPayload(token: string) {
+  try {
+    const payload = token.split('.')[1];
+    const decoded = Buffer.from(payload, 'base64url').toString();
+    return JSON.parse(decoded);
+  } catch {
+    return null;
+  }
+}
