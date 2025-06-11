@@ -1,5 +1,5 @@
-import type { TopicIcon } from "@/components/topic-button";
 import { api } from "@/config/api.config";
+import type { TopicIconType } from "@/types/topic";
 
 type Response = {
     data: {
@@ -8,7 +8,7 @@ type Response = {
         slug: string;
         createdAt: string;
         updatedAt: string;
-        icon: TopicIcon
+        icon: TopicIconType
     }
 }
 

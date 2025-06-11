@@ -44,8 +44,6 @@ export default async function TopicsPage({ searchParams }: TopicsPageProps) {
                                 <TableCell className="flex items-center gap-2">
                                     <TopicButton
                                         title={topic.title}
-                                        isActive={false}
-                                        slug={topic.slug}
                                         icon={topic.icon}
                                     />
                                 </TableCell>
@@ -53,7 +51,7 @@ export default async function TopicsPage({ searchParams }: TopicsPageProps) {
                                     <TopicSlugBadge slug={topic.slug} />
                                 </TableCell>
                                 <TableCell>
-                                    {topic.postsCount} artigos
+                                    {topic.postsCount ?? 0} artigos
                                 </TableCell>
                                 <TableCell className="text-right">
                                     <Button variant="outline" size="icon">

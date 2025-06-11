@@ -121,20 +121,18 @@ export default async function HomePage() {
                         <TopicButton
                             key={index}
                             title={topic.title}
-                            slug={topic.slug}
-                            isActive={false}
                             icon={topic.icon}
                         />
                     ))}
                 </aside>
                 <div className="flex flex-col w-full">
-                    <ArticleCard />
+                    {/* <ArticleCard />
                     <Separator className="my-6" />
                     <ArticleCard />
                     <Separator className="my-6" />
                     <ArticleCard />
                     <Separator className="my-6" />
-                    <ArticleCard />
+                    <ArticleCard /> */}
                     <footer className="flex justify-end mt-6">
                         <Button variant="secondary">
                             Ver todos

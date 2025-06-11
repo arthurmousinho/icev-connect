@@ -3,24 +3,21 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { UserBadge } from "@/components/user-badge";
-import { Feather, Gamepad2, Heart } from "lucide-react";
+import { Feather, Heart } from "lucide-react";
 import { LikesBadge } from "@/components/likes-badge";
-import { topicIconMap, type TopicIcon } from "@/components/topic-button";
+import { TopicIcon } from "@/components/topic-icon";
+import type { TopicIconType } from "@/types/topic";
 
 type TopicHeaderProps = {
     title: string;
-    slug: string;
-    icon: TopicIcon;
+    icon: TopicIconType;
 }
 
-export function TopicHeader({ title, slug, icon }: TopicHeaderProps) {
-
-    const IconComponent = topicIconMap[icon];
-
+export function TopicHeader({ title, icon }: TopicHeaderProps) {
     return (
         <header className="flex flex-col items-center justify-between gap-4 sticky top-20 w-[500px]">
             <div className="flex flex-col justify-start gap-2 w-full">
-                <IconComponent size={50} />
+                <TopicIcon size={50} icon={icon} />
                 <h1 className="font-bold text-2xl">
                     {title}
                 </h1>

@@ -4,7 +4,6 @@ import { Separator } from "@/components/ui/separator";
 import { ArrowDown } from "lucide-react";
 import { TopicHeader } from "./topic-header";
 import { Header } from "@/components/header";
-import { TopicIcon } from "@/components/topic-button";
 import { findTopicBySlugRequest } from "@/http/topic/find-topic-by-slug.http";
 import { findAllArticlesByTopicSlugRequest } from "@/http/articles/find-all-articles-by-topic-slug.http";
 
@@ -24,8 +23,7 @@ export default async function TopicPage({ params }: TopicPageProps) {
             <div className="w-full max-w-[1200px] flex flex-row items-start justify-center gap-10">
                 <TopicHeader
                     title={topicData.title}
-                    slug={topicData.slug}
-                    icon={TopicIcon[topicData.icon]}
+                    icon={topicData.icon}
                 />
                 <div className="flex flex-col w-full pb-10">
                     {topicArticles.map(article => (

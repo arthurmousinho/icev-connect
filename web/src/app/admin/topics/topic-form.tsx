@@ -18,14 +18,14 @@ import { TopicSlugBadge } from "./topic-slug-badge";
 import { generateSlug } from "@/lib/utils";
 import { createTopicAction } from "./actions";
 import { toast } from "sonner";
-import { TopicIcon, topicIconMap } from "@/components/topic-button";
 import {
     Select,
     SelectContent,
-    SelectItem,
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import { TopicIconEnum } from "@/types/topic";
+import { TopicIcon } from "@/components/topic-icon";
 
 const loginSchema = z.object({
     title: z
@@ -34,7 +34,7 @@ const loginSchema = z.object({
         .min(6, { message: 'O título deve ter pelo menos 6 caracteres' })
         .max(255, { message: 'O título deve ter no máximo 255 caracteres' }),
     icon: z
-        .enum(Object.keys(TopicIcon) as [TopicIcon, ...TopicIcon[]], { message: 'Ícone é obrigatório' }),
+        .enum(Object.keys(TopicIconEnum) as [keyof typeof TopicIconEnum])
 })
 
 type TopicFormValues = z.infer<typeof loginSchema>;
@@ -52,7 +52,7 @@ export function TopicForm({ data, isUpdating = false }: TopicFormProps) {
         resolver: zodResolver(loginSchema),
         defaultValues: {
             title: data?.title ?? '',
-            icon: data?.icon ?? TopicIcon.DEFAULT
+            icon: data?.icon ?? TopicIconEnum.DEFAULT
         }
     })
 
@@ -112,23 +112,15 @@ export function TopicForm({ data, isUpdating = false }: TopicFormProps) {
                                         <SelectValue placeholder="Ícone do tópico" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        {Object.values(TopicIcon).map((icon) => {
-                                            const TopicIcon = topicIconMap[icon];
-
-                                            return (
-                                                <SelectItem key={icon} value={icon}>
-                                                    <TopicIcon />
-                                                    {icon}
-                                                </SelectItem>
-                                            )
-                                        })}
+                                        {Object.keys(TopicIconEnum).map((key) => (
+                                            <TopicIcon icon={key as keyof typeof TopicIconEnum} />
+                                        ))}
                                     </SelectContent>
                                 </Select>
                             </FormControl>
                             <FormMessage />
                         </FormItem>
-                    )}
-                />
+                    )}                />
                 <Button variant="default" type="submit" className="w-full" isLoading={isLoading}>
                     Salvar
                 </Button>

@@ -3,7 +3,7 @@ import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, Table
 import { MoreVertical } from "lucide-react";
 import { Paginator } from "@/components/paginator";
 import { findAllArticlesRequest } from "@/http/articles/find-all-articles.http";
-import { TopicButton, TopicIcon } from "@/components/topic-button";
+import { TopicButton } from "@/components/topic-button";
 import { UserBadge } from "@/components/user-badge";
 
 type TopicsPageProps = {
@@ -45,9 +45,7 @@ export default async function ArticlesPage({ searchParams }: TopicsPageProps) {
                                 <TableCell>
                                     <TopicButton
                                         title={article.topic.title}
-                                        slug={''}
-                                        isActive={false}
-                                        icon={TopicIcon[article.topic.icon]}
+                                        icon={article.topic.icon}
                                     />
                                 </TableCell>
                                 <TableCell>

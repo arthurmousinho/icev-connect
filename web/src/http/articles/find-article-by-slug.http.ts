@@ -1,4 +1,5 @@
 import { api } from "@/config/api.config";
+import type { TopicIconType } from "@/types/topic";
 
 type Response = {
     data: {
@@ -13,7 +14,7 @@ type Response = {
         updatedAt: string;
         topic: {
             slug: string;
-            icon: string;
+            icon: TopicIconType;
             title: string;
         };
         author: {
