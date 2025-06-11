@@ -141,4 +141,34 @@ export class ArticleService {
         return articleCreated;
     }
 
+    public async findAllByAuthorId(authorId: string) {
+        const articles = await this.prismaService.article.findMany({
+            where: { authorId },
+            select: {
+                id: true,
+                title: true,
+                slug: true,
+                description: true,
+                createdAt: true,
+                updatedAt: true,
+                author: {
+                    select: {
+                        email: true,
+                        name: true,
+                        avatarUrl: true
+                    }
+                },
+                topic: {
+                    select: {
+                        icon: true,
+                        title: true
+                    }
+                }
+            }
+        });
+
+        return articles;
+    }
+
+
 }

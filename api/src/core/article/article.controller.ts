@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, NotFoundException, Param, Post, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, HttpCode, Param, Post, Req, UseGuards } from "@nestjs/common";
 import { ArticleService } from "./article.service";
 import { CreateArticleDTO } from "./dtos/create-article.dto";
 import { AuthGuard } from "@nestjs/passport";
@@ -38,6 +38,13 @@ export class ArticlesController {
     @Post('topic/:topicSlug')
     public async findAllByTopic(@Param('topicSlug') topicSlug: string) {
         const data = await this.articleService.findAllByTopicSlug(topicSlug);
+        return { data };
+    }
+
+    @HttpCode(200)
+    @Post('author')
+    public async findAllByAuthor(@Req() req: any) {
+        const data = await this.articleService.findAllByAuthorId(req.user.id);
         return { data };
     }
 
