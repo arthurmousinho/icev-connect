@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -7,26 +8,32 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LogOut, UserRound } from "lucide-react";
-import Link from "next/link";
+import { getUserProfileRequest } from "@/http/user/get-user-profile.http";
+import { getInitials } from "@/lib/utils";
 
 export async function ProfileButton() {
+
+    const { data } = await getUserProfileRequest();
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <div className="flex items-center gap-2 cursor-pointer">
                     <Avatar>
-                        <AvatarFallback>AM</AvatarFallback>
-                        <AvatarImage src="https://github.com/arthurmousinho.png" />
+                        <AvatarFallback>
+                            {getInitials(data.name)}
+                        </AvatarFallback>
+                        <AvatarImage src={data.avatarUrl} />
                     </Avatar>
                 </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
-                <div className="flex flex-col items-start p-2">
+                <div className="flex flex-col items-start p-2 gap-1">
                     <span className="font-medium text-sm">
-                        Arthur Mousinho
+                        {data.name}
                     </span>
                     <span className="text-muted-foreground text-xs">
-                        arthurmousinho@icev.com
+                        {data.email}
                     </span>
                 </div>
                 <DropdownMenuSeparator />
