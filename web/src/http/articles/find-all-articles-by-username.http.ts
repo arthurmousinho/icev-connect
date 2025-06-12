@@ -18,6 +18,7 @@ type Response = {
         }
         createdAt: string;
         updatedAt: string;
+        likesCount: number;
     }[]
 }
 

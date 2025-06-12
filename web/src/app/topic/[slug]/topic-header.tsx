@@ -79,7 +79,7 @@ export function TopicHeader({ title, icon }: TopicHeaderProps) {
                             />
                         </div>
                     </div>
-                    <LikeButton count={34} />
+                    <LikeButton count={34}  />
                 </Link>
             </div>
         </header>

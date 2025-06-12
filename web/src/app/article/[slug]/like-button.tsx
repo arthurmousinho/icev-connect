@@ -7,12 +7,12 @@ import { useTransition, useState } from "react";
 import { toast } from "sonner";
 
 type LikeButtonProps = {
-    articleId: string;
-    hasLiked: boolean;
-    count: number;
+    articleId?: string; 
+    hasLiked?: boolean; 
+    count: number;     
 };
 
-export function LikeButton({ articleId, hasLiked, count }: LikeButtonProps) {
+export function LikeButton({ articleId, hasLiked = false, count = 0 }: LikeButtonProps) {
 
     const [isPending, startTransition] = useTransition();
 
@@ -20,7 +20,12 @@ export function LikeButton({ articleId, hasLiked, count }: LikeButtonProps) {
     const [likesCount, setLikesCount] = useState(count);
     const [isAnimating, setIsAnimating] = useState(false);
 
-    const toggleLike = async () => {
+    async function toggleLike() {
+
+        if (!articleId) {
+            return;
+        }
+
         const action = liked ? unlikeArticleAction : likeArticleAction;
         const result = await action(articleId);
 
@@ -30,7 +35,7 @@ export function LikeButton({ articleId, hasLiked, count }: LikeButtonProps) {
             toast(result.message);
 
             setIsAnimating(true);
-            setTimeout(() => setIsAnimating(false), 200); 
+            setTimeout(() => setIsAnimating(false), 200);
             return;
         }
 
@@ -42,7 +47,7 @@ export function LikeButton({ articleId, hasLiked, count }: LikeButtonProps) {
             variant="ghost"
             size="sm"
             onClick={() => startTransition(toggleLike)}
-            disabled={isPending}
+            disabled={isPending || !articleId} 
             className="text-sm text-muted-foreground flex items-center gap-1"
         >
             <Heart

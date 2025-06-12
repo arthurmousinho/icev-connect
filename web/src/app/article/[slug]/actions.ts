@@ -3,11 +3,14 @@
 import { likeArticleRequest } from '@/http/articles/like-article.http';
 import { unlikeArticleRequest } from '@/http/articles/unlike-article.http';
 import { HTTPError } from 'ky';
+import { revalidateTag } from 'next/cache';
 
 export async function likeArticleAction(articleId: string) {
     try {
 
-        await likeArticleRequest(articleId)
+        await likeArticleRequest(articleId);
+
+        revalidateTag('articles/*');
 
         return {
             message: 'Artigo curtido com sucesso!',
@@ -32,8 +35,8 @@ export async function likeArticleAction(articleId: string) {
 
 export async function unlikeArticleAction(articleId: string) {
     try {
-        
-        await unlikeArticleRequest(articleId)
+
+        await unlikeArticleRequest(articleId);
 
         return {
             message: 'Curtida removida com sucesso!',
@@ -45,8 +48,6 @@ export async function unlikeArticleAction(articleId: string) {
             const { message } = await error.response.json();
             return { message, success: false }
         }
-
-        console.error(error);
 
         return {
             message: 'Erro inesperado, tente novamente mais tarde',

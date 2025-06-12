@@ -8,6 +8,7 @@ type ArticleCardProps = {
     slug: string;
     description: string;
     authorName: string;
+    likesCount: number;
     authorAvatarUrl: string;
     topicTitle: string;
     createdAt: string;
@@ -21,6 +22,7 @@ export function ArticleCard({
     authorAvatarUrl,
     topicTitle,
     createdAt,
+    likesCount
 }: ArticleCardProps) {
     return (
         <Link href={`/article/${slug}`} className="flex flex-col gap-3 group">
@@ -43,7 +45,7 @@ export function ArticleCard({
                         em {formatDate(createdAt)}
                     </span>
                 </div>
-                <LikeButton count={42} />
+                <LikeButton count={likesCount} hasLiked={false} articleId={""} />
             </footer>
         </Link >
     )

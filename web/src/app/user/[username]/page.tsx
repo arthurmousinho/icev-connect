@@ -97,6 +97,7 @@ export default async function UserPage({ params }: UserPageProps) {
                                 authorAvatarUrl={article.author.avatarUrl}
                                 authorName={article.author.name}
                                 createdAt={article.createdAt}
+                                likesCount={article.likesCount}
                             />
                             <Separator className="my-6" />
                         </div>

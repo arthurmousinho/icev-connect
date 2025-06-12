@@ -36,6 +36,7 @@ export default async function TopicPage({ params }: TopicPageProps) {
                                 authorAvatarUrl={article.author.avatarUrl}
                                 topicTitle={article.topic.title}
                                 createdAt={article.createdAt}
+                                likesCount={article.likesCount}
                             />
                             <Separator className="my-6" />
                         </div>
