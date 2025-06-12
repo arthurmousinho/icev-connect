@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, Param, Post, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, Req, UseGuards } from "@nestjs/common";
 import { ArticleService } from "./article.service";
 import { CreateArticleDTO } from "./dtos/create-article.dto";
 import { AuthGuard } from "@nestjs/passport";
@@ -12,6 +12,12 @@ export class ArticlesController {
     constructor(
         private readonly articleService: ArticleService
     ) { }
+
+    @Get(':slug')
+    public async findBySlug(@Param('slug') slug: string) {
+        const data = await this.articleService.findBySlug(slug);
+        return { data };
+    }
 
     @Post()
     public async create(@Body() body: CreateArticleDTO, @Req() req: any) {
@@ -48,10 +54,20 @@ export class ArticlesController {
         return { data };
     }
 
-    @Get(':slug')
-    public async findBySlug(@Param('slug') slug: string) {
-        const data = await this.articleService.findBySlug(slug);
-        return { data };
+    @Post('like/:id')
+    public async like(@Param('id') id: string, @Req() req: any) {
+        return await this.articleService.addLike({
+            userId: req.user.id,
+            articleId: id
+        });
+    }
+
+    @Delete('like/:id')
+    public async unlike(@Param('id') id: string, @Req() req: any) {
+        return await this.articleService.removeLike({
+            userId: req.user.id,
+            articleId: id
+        });
     }
 
 }

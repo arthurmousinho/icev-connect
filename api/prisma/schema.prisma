@@ -21,7 +21,8 @@ model User {
   isActive Boolean      @default(true) @map("is_active")
   provider AuthProvider @default(GOOGLE)
 
-  articles Article[]
+  articles     Article[]
+  articleLikes ArticleLike[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -37,6 +38,9 @@ model Article {
   content     String
   slug        String @unique
 
+  articleLike ArticleLike[]
+  likesCount  Int           @map("likes_count") @default(0)
+
   topic   Topic  @relation(fields: [topicId], references: [id])
   topicId String @map("topic_id")
 
@@ -47,6 +51,21 @@ model Article {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("articles")
+}
+
+model ArticleLike {
+  id String @id @default(cuid())
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
+
+  article   Article @relation(fields: [articleId], references: [id])
+  articleId String  @map("article_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([userId, articleId])
+  @@map("article_likes")
 }
 
 model Topic {

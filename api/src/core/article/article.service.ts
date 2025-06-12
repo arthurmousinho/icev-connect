@@ -1,10 +1,12 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "src/infra/database/prisma.service";
 import { generateSlug } from "src/shared/utils/generate-slug.util";
 import { TopicService } from "../topic/topic.service";
 import { UserService } from "../user/user.service";
 import type { CreateArticleDTO } from "./dtos/create-article.dto";
 import type { FindMethodOptions } from "src/shared/types/find-method-options.type";
+import type { AddLikeDTO } from "./dtos/add-like.dto";
+import type { RemoveLikeDTO } from "./dtos/remove-like.dto";
 
 @Injectable()
 export class ArticleService {
@@ -17,9 +19,7 @@ export class ArticleService {
 
     public async findBySlug(
         slug: string,
-        options: FindMethodOptions = {
-            throwError: true
-        }
+        options: FindMethodOptions = { throwError: true }
     ) {
         const article = await this.prismaService.article.findFirst({
             where: { slug },
@@ -48,6 +48,21 @@ export class ArticleService {
         return article;
     }
 
+    public async findById(
+        id: string,
+        options: FindMethodOptions = { throwError: true }
+    ) {
+        const article = await this.prismaService.article.findFirst({
+            where: { id }
+        });
+
+        if (!article && options?.throwError) {
+            throw new NotFoundException('Artigo não encontrado.');
+        }
+
+        return article;
+    }
+
     public async findAll() {
         const articles = await this.prismaService.article.findMany({
             select: {
@@ -55,6 +70,7 @@ export class ArticleService {
                 title: true,
                 slug: true,
                 description: true,
+                likesCount: true,
                 createdAt: true,
                 updatedAt: true,
                 author: {
@@ -90,6 +106,7 @@ export class ArticleService {
                 description: true,
                 createdAt: true,
                 updatedAt: true,
+                likesCount: true,
                 author: {
                     select: {
                         avatarUrl: true,
@@ -109,6 +126,66 @@ export class ArticleService {
         })
 
         return articlesByTopicSlug;
+    }
+
+    public async findAllByUsername(username: string) {
+        await this.userService.findByUsername(username);
+
+        const articles = await this.prismaService.article.findMany({
+            where: {
+                author: {
+                    username
+                }
+            },
+            select: {
+                id: true,
+                title: true,
+                slug: true,
+                likesCount: true,
+                description: true,
+                createdAt: true,
+                updatedAt: true,
+                author: {
+                    select: {
+                        email: true,
+                        name: true,
+                        avatarUrl: true,
+                        username: true
+                    }
+                },
+                topic: {
+                    select: {
+                        icon: true,
+                        title: true
+                    }
+                }
+            },
+            orderBy: {
+                createdAt: 'desc'
+            }
+        });
+
+        return articles;
+    }
+
+    private async findUserLikeForArticle(
+        data: { userId: string, articleId: string },
+        options: FindMethodOptions = { throwError: true }
+    ) {
+        const articleLikeByUser = await this.prismaService.articleLike.findUnique({
+            where: {
+                userId_articleId: {
+                    userId: data.userId,
+                    articleId: data.articleId
+                }
+            }
+        });
+
+        if (!articleLikeByUser && options.throwError) {
+            throw new BadRequestException('Você não curtiu esse artigo');
+        }
+
+        return articleLikeByUser;
     }
 
     public async create(data: CreateArticleDTO) {
@@ -143,43 +220,66 @@ export class ArticleService {
         return articleCreated;
     }
 
-    public async findAllByUsername(username: string) {
-        await this.userService.findByUsername(username);
+    public async addLike(data: AddLikeDTO) {
+        const [articleExists, alreadyLiked] = await Promise.all([
+            this.findById(data.articleId),
+            this.findUserLikeForArticle(data, { throwError: false })
+        ]);
 
-        const articles = await this.prismaService.article.findMany({
-            where: {
-                author: {
-                    username
+        if (alreadyLiked) {
+            throw new ConflictException('Você já curtiu esse artigo');
+        }
+
+        await this.prismaService.$transaction([
+            this.prismaService.articleLike.create({
+                data: {
+                    userId: data.userId,
+                    articleId: data.articleId
                 }
-            },
-            select: {
-                id: true,
-                title: true,
-                slug: true,
-                description: true,
-                createdAt: true,
-                updatedAt: true,
-                author: {
-                    select: {
-                        email: true,
-                        name: true,
-                        avatarUrl: true,
-                        username: true
-                    }
+            }),
+            this.prismaService.article.update({
+                where: {
+                    id: data.articleId
                 },
-                topic: {
-                    select: {
-                        icon: true,
-                        title: true
+                data: {
+                    likesCount: {
+                        increment: 1
                     }
                 }
-            },
-            orderBy: {
-                createdAt: 'desc'
-            }
-        });
+            })
+        ]);
 
-        return articles;
+        return;
+    }
+
+    public async removeLike(data: RemoveLikeDTO) {
+        await Promise.all([
+            this.findById(data.articleId),
+            this.findUserLikeForArticle(data, { throwError: true })
+        ]);
+
+        await this.prismaService.$transaction([
+            this.prismaService.articleLike.delete({
+                where: {
+                    userId_articleId: {
+                        userId: data.userId,
+                        articleId: data.articleId
+                    }
+                }
+            }),
+            this.prismaService.article.update({
+                where: {
+                    id: data.articleId
+                },
+                data: {
+                    likesCount: {
+                        decrement: 1
+                    }
+                }
+            })
+        ]);
+
+        return;
     }
 
 }
