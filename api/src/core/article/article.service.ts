@@ -18,11 +18,11 @@ export class ArticleService {
     ) { }
 
     public async findBySlug(
-        slug: string,
-        options: FindMethodOptions = { throwError: true }
+        data: { slug: string, userId?: string },
+        options: FindMethodOptions = { throwError: true },
     ) {
         const article = await this.prismaService.article.findFirst({
-            where: { slug },
+            where: { slug: data.slug },
             include: {
                 topic: {
                     select: {
@@ -45,7 +45,21 @@ export class ArticleService {
             throw new NotFoundException('Artigo não encontrado.');
         }
 
-        return article;
+        let hasLiked = false;
+
+        if (data.userId && article) {
+            const like = await this.findUserLikeForArticle(
+                { userId: data.userId, articleId: article.id },
+                { throwError: false }
+            );
+
+            hasLiked = !!like;
+        }
+
+        return {
+            ...article,
+            hasLiked
+        };
     }
 
     public async findById(
@@ -198,7 +212,7 @@ export class ArticleService {
         const articleSlug = generateSlug(data.title);
 
         const articleWithSlug = await this.findBySlug(
-            articleSlug,
+            { slug: articleSlug },
             { throwError: false }
         );
 

@@ -14,8 +14,11 @@ export class ArticlesController {
     ) { }
 
     @Get(':slug')
-    public async findBySlug(@Param('slug') slug: string) {
-        const data = await this.articleService.findBySlug(slug);
+    public async findBySlug(@Param('slug') slug: string, @Req() req: any) {
+        const data = await this.articleService.findBySlug({
+            slug,
+            userId: req.user.id
+        });
         return { data };
     }
 
