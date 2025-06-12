@@ -1,15 +1,15 @@
 import "@/styles/markdown.css";
 
-import { Separator } from "@/components/ui/separator";
+import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeSanitize from "rehype-sanitize";
+import { Separator } from "@/components/ui/separator";
 import { UserBadge } from "@/components/user-badge";
-import { LikesBadge } from "@/components/likes-badge";
 import { Header } from "@/components/header";
 import { findArticleBySlugRequest } from "@/http/articles/find-article-by-slug.http";
 import { formatDate } from "@/lib/utils";
-import Link from "next/link";
+import { LikeButton } from "@/app/article/[slug]/like-button";
 
 type ArticlePageProps = {
     params: Promise<{ slug: string }>;
@@ -24,10 +24,13 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         <div className="flex flex-col h-dvh justify-top items-center gap-10">
             <Header />
             <main className="w-full max-w-[800px] space-y-10 pb-10">
-                <header className="space-y-4">
-                    <p className="text-sm font-semibold text-muted-foreground">
+                <header className="flex flex-col gap-2">
+                    <Link
+                        href={`/topic/${data.topic.slug}`}
+                        className="text-sm font-semibold text-muted-foreground hover:underline underline-offset-4"
+                    >
                         {data.topic.title}
-                    </p>
+                    </Link>
                     <h3 className="text-4xl font-semibold text-balance">
                         {data.title}
                     </h3>
@@ -49,7 +52,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                                 em {formatDate(data.createdAt)}
                             </span>
                         </div>
-                        <LikesBadge count={42} />
+                        <LikeButton
+                            count={42}
+                            hasLiked={data.hasLiked}
+                            articleId={data.id}
+                        />
                     </footer>
                     <Separator />
                 </header>

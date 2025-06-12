@@ -4,9 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { UserBadge } from "@/components/user-badge";
 import { Feather, Heart } from "lucide-react";
-import { LikesBadge } from "@/components/likes-badge";
 import { TopicIcon } from "@/components/topic-icon";
 import type { TopicIconType } from "@/types/topic";
+import { LikeButton } from "@/app/article/[slug]/like-button";
 
 type TopicHeaderProps = {
     title: string;
@@ -51,7 +51,7 @@ export function TopicHeader({ title, icon }: TopicHeaderProps) {
                             />
                         </div>
                     </div>
-                    <LikesBadge count={34} />
+                    <LikeButton count={34} />
                 </Link>
                 <Link href="/user/username" className="flex items-center justify-between gap-2 w-full group">
                     <div className="flex items-center gap-2">
@@ -65,7 +65,7 @@ export function TopicHeader({ title, icon }: TopicHeaderProps) {
                             />
                         </div>
                     </div>
-                    <LikesBadge count={34} />
+                    <LikeButton count={34} />
                 </Link>
                 <Link href="/user/username" className="flex items-center justify-between gap-2 w-full group">
                     <div className="flex items-center gap-2">
@@ -79,7 +79,7 @@ export function TopicHeader({ title, icon }: TopicHeaderProps) {
                             />
                         </div>
                     </div>
-                    <LikesBadge count={34} />
+                    <LikeButton count={34} />
                 </Link>
             </div>
         </header>

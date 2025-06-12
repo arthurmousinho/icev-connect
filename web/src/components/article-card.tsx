@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { UserBadge } from "./user-badge";
-import { LikesBadge } from "./likes-badge";
+import { LikeButton } from "../app/article/[slug]/like-button";
 import { formatDate } from "@/lib/utils";
 
 type ArticleCardProps = {
@@ -43,7 +43,7 @@ export function ArticleCard({
                         em {formatDate(createdAt)}
                     </span>
                 </div>
-                <LikesBadge count={42} />
+                <LikeButton count={42} />
             </footer>
         </Link >
     )
