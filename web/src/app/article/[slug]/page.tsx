@@ -4,6 +4,7 @@ import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeSanitize from "rehype-sanitize";
+
 import { Separator } from "@/components/ui/separator";
 import { UserBadge } from "@/components/user-badge";
 import { Header } from "@/components/header";
@@ -53,7 +54,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                             </span>
                         </div>
                         <LikeButton
-                            count={42}
+                            count={data.likesCount}
                             hasLiked={data.hasLiked}
                             articleId={data.id}
                         />

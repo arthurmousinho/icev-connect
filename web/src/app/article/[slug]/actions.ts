@@ -1,6 +1,7 @@
 'use server'
 
 import { likeArticleRequest } from '@/http/articles/like-article.http';
+import { unlikeArticleRequest } from '@/http/articles/unlike-article.http';
 import { HTTPError } from 'ky';
 
 export async function likeArticleAction(articleId: string) {
@@ -32,10 +33,10 @@ export async function likeArticleAction(articleId: string) {
 export async function unlikeArticleAction(articleId: string) {
     try {
         
-        await unlikeArticleAction(articleId)
+        await unlikeArticleRequest(articleId)
 
         return {
-            message: 'Artigo curtido com sucesso!',
+            message: 'Curtida removida com sucesso!',
             success: true,
         }
 

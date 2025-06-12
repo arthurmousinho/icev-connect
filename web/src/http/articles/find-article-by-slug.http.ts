@@ -23,6 +23,7 @@ type Response = {
             username: string;
         },
         hasLiked: boolean;
+        likesCount: number;
     }
 }
 
