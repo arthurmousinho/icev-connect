@@ -24,6 +24,7 @@ export default async function TopicPage({ params }: TopicPageProps) {
                 <TopicHeader
                     title={topicData.title}
                     icon={topicData.icon}
+                    ranking={topicData.ranking}
                 />
                 <div className="flex flex-col w-full pb-10">
                     {topicArticles.map(article => (

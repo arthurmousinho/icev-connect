@@ -8,7 +8,16 @@ type Response = {
         slug: string;
         createdAt: string;
         updatedAt: string;
-        icon: TopicIconType
+        icon: TopicIconType,
+        ranking: {
+            position: number;
+            user: {
+                name: string;
+                username: string;
+                avatarUrl: string ;
+            },
+            likesCount: number;
+        }[]
     }
 }
 

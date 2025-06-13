@@ -11,9 +11,18 @@ import { LikeButton } from "@/app/article/[slug]/like-button";
 type TopicHeaderProps = {
     title: string;
     icon: TopicIconType;
+    ranking: {
+        position: number;
+        user: {
+            name: string;
+            username: string;
+            avatarUrl: string;
+        },
+        likesCount: number;
+    }[]
 }
 
-export function TopicHeader({ title, icon }: TopicHeaderProps) {
+export function TopicHeader({ title, icon, ranking }: TopicHeaderProps) {
     return (
         <header className="flex flex-col items-center justify-between gap-4 sticky top-20 w-[500px]">
             <div className="flex flex-col justify-start gap-2 w-full">
@@ -39,48 +48,26 @@ export function TopicHeader({ title, icon }: TopicHeaderProps) {
                 </h2>
             </div>
             <div className="flex flex-col w-full gap-4">
-                <Link href="/user/username" className="flex items-center justify-between gap-2 w-full group">
-                    <div className="flex items-center gap-2">
-                        <span className="text-sm text-muted-foreground">
-                            1º
-                        </span>
-                        <div className="group-hover:underline underline-offset-4">
-                            <UserBadge
-                                name="John Doe"
-                                avatarUrl="https://github.com/arthurmousinho.png"
-                            />
+                {ranking.map((item, index) => (
+                    <Link
+                        key={index}
+                        href={`/user/${item.user.username}`}
+                        className="flex items-center justify-between gap-2 w-full group"
+                    >
+                        <div className="flex items-center gap-2">
+                            <span className="text-sm text-muted-foreground">
+                                {item.position}º
+                            </span>
+                            <div className="group-hover:underline underline-offset-4">
+                                <UserBadge
+                                    name={item.user.name}
+                                    avatarUrl={item.user.avatarUrl}
+                                />
+                            </div>
                         </div>
-                    </div>
-                    <LikeButton count={34} />
-                </Link>
-                <Link href="/user/username" className="flex items-center justify-between gap-2 w-full group">
-                    <div className="flex items-center gap-2">
-                        <span className="text-sm text-muted-foreground">
-                            2º
-                        </span>
-                        <div className="group-hover:underline underline-offset-4">
-                            <UserBadge
-                                name="John Doe"
-                                avatarUrl="https://github.com/arthurmousinho.png"
-                            />
-                        </div>
-                    </div>
-                    <LikeButton count={34} />
-                </Link>
-                <Link href="/user/username" className="flex items-center justify-between gap-2 w-full group">
-                    <div className="flex items-center gap-2">
-                        <span className="text-sm text-muted-foreground">
-                            3º
-                        </span>
-                        <div className="group-hover:underline underline-offset-4">
-                            <UserBadge
-                                name="John Doe"
-                                avatarUrl="https://github.com/arthurmousinho.png"
-                            />
-                        </div>
-                    </div>
-                    <LikeButton count={34}  />
-                </Link>
+                        <LikeButton count={item.likesCount} />
+                    </Link>
+                ))}
             </div>
         </header>
     )
