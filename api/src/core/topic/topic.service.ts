@@ -141,19 +141,19 @@ export class TopicService {
             throw new NotFoundException('Tópico não encontrado.')
         }
 
-        let hasLiked = false;
+        let hasFavorite = false;
 
         if (data.userId && topic) {
             const like = await this.findUserFavoriteTopic(
                 { userId: data.userId, topicId: topic.id },
                 { throwError: false }
             );
-            hasLiked = !!like;
+            hasFavorite = !!like;
         }
 
         return {
             ...topic,
-            hasLiked
+            hasFavorite
         };
     }
 

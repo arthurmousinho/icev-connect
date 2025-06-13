@@ -1,3 +1,5 @@
+'use client'
+
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
@@ -6,11 +8,16 @@ import { UserBadge } from "@/components/user-badge";
 import { Bookmark, Feather } from "lucide-react";
 import { TopicIcon } from "@/components/topic-icon";
 import { LikeButton } from "@/app/article/[slug]/like-button";
+import { act, useState, useTransition } from "react";
+import { addTopicToFavoriteAction, removeTopicFromFavoritesAction } from "./actions";
 import type { TopicIconType } from "@/types/topic";
+import { toast } from "sonner";
 
 type TopicHeaderProps = {
+    id: string;
     title: string;
     icon: TopicIconType;
+    hasFavorite: boolean;
     ranking: {
         position: number;
         user: {
@@ -22,7 +29,37 @@ type TopicHeaderProps = {
     }[]
 }
 
-export function TopicHeader({ title, icon, ranking }: TopicHeaderProps) {
+export function TopicHeader({
+    id,
+    title,
+    icon,
+    ranking,
+    hasFavorite
+}: TopicHeaderProps) {
+
+    const [isPending, startTransition] = useTransition();
+
+    const [favorite, setFavorite] = useState(hasFavorite);
+    const [isAnimating, setIsAnimating] = useState(false);
+
+    async function toggleFavorite() {
+        const action = favorite ? removeTopicFromFavoritesAction : addTopicToFavoriteAction;
+        const result = await action(id);
+
+        if (result.success) {
+            setFavorite(!favorite);
+            toast.success(result.message);
+
+            setIsAnimating(true);
+            setTimeout(() => setIsAnimating(false), 200);
+
+            return;
+        }
+
+        toast.error(result.message);
+    }
+
+
     return (
         <header className="flex flex-col items-center justify-between gap-4 sticky top-20 w-[500px]">
             <div className="flex flex-col justify-start gap-2 w-full">
@@ -32,9 +69,20 @@ export function TopicHeader({ title, icon, ranking }: TopicHeaderProps) {
                 </h1>
             </div>
             <nav className="space-y-2 w-full">
-                <Button variant="secondary" className="w-full">
-                    <Bookmark size={20} />
-                    Favoritar Tópico
+                <Button
+                    variant="secondary"
+                    className={`
+                        w-full flex items-center gap-2 transition-transform duration-200 ease-out
+                        ${isAnimating ? "scale-105" : "scale-100"}
+                    `}
+                    onClick={() => startTransition(toggleFavorite)}
+                    disabled={isPending}
+                >
+                    <Bookmark
+                        size={20}
+                        className={favorite ? "text-primary fill-primary" : ""}
+                    />
+                    {favorite ? "Tópico Favoritado" : "Favoritar Tópico"}
                 </Button>
                 <Button variant="secondary" className="w-full">
                     <Feather size={20} />

@@ -9,6 +9,7 @@ type Response = {
         createdAt: string;
         updatedAt: string;
         icon: TopicIconType,
+        hasFavorite: boolean,
         ranking: {
             position: number;
             user: {

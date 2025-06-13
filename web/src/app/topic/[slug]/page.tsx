@@ -22,9 +22,11 @@ export default async function TopicPage({ params }: TopicPageProps) {
             <Header />
             <div className="w-full max-w-[1200px] flex flex-row items-start justify-center gap-10">
                 <TopicHeader
+                    id={topicData.id}
                     title={topicData.title}
                     icon={topicData.icon}
                     ranking={topicData.ranking}
+                    hasFavorite={topicData.hasFavorite}
                 />
                 <div className="flex flex-col w-full pb-10">
                     {topicArticles.map(article => (

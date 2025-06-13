@@ -32,14 +32,14 @@ export function LikeButton({ articleId, hasLiked = false, count = 0 }: LikeButto
         if (result.success) {
             setLiked(!liked);
             setLikesCount(prev => prev + (liked ? -1 : 1));
-            toast(result.message);
+            toast.success(result.message);
 
             setIsAnimating(true);
             setTimeout(() => setIsAnimating(false), 200);
             return;
         }
 
-        toast(result.message);
+        toast.error(result.message);
     };
 
     return (
