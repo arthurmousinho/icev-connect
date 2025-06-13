@@ -7,11 +7,11 @@ import { Separator } from "@/components/ui/separator";
 import { UserBadge } from "@/components/user-badge";
 import { Bookmark, Feather } from "lucide-react";
 import { TopicIcon } from "@/components/topic-icon";
-import { LikeButton } from "@/app/article/[slug]/like-button";
-import { act, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { addTopicToFavoriteAction, removeTopicFromFavoritesAction } from "./actions";
-import type { TopicIconType } from "@/types/topic";
 import { toast } from "sonner";
+import { LikeButton } from "../../article/[slug]/like-button";
+import type { TopicIconType } from "@/types/topic";
 
 type TopicHeaderProps = {
     id: string;

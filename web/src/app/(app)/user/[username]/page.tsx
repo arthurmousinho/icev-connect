@@ -6,7 +6,6 @@ import { ArrowDown } from "lucide-react";
 import { Bot, Braces, Globe, ListChecks, Monitor } from "lucide-react"
 import { TopicButton } from "@/components/topic-button";
 import { findAllArticlesByUsernameRequest } from "@/http/articles/find-all-articles-by-username.http";
-import { Header } from "@/components/header";
 import { findUserByUsernameRequest } from "@/http/user/find-user-by-username.http";
 import { getInitials } from "@/lib/utils";
 import Link from "next/link";
@@ -55,8 +54,7 @@ export default async function UserPage({ params }: UserPageProps) {
     ]);
 
     return (
-        <div className="flex flex-col h-dvh justify-top items-center gap-10">
-            <Header />
+        <div className="flex flex-col h-dvh justify-top items-center w-full">
             <div className="w-full max-w-[1200px] flex flex-row items-start justify-center gap-10">
                 <header className="flex flex-col items-center justify-between gap-4 sticky top-20 w-[500px]">
                     <div className="flex flex-col justify-start gap-2 w-full">

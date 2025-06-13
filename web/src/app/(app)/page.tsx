@@ -1,11 +1,8 @@
 import { Hero } from "./hero";
-import { ArticleCard } from "@/components/article-card";
-import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { AlignLeft, Bot, Braces, Cpu, Database, DatabaseZap, EthernetPort, FileText, Gamepad2, Globe, Layers, ListChecks, Microchip, Monitor, Network, Smartphone } from "lucide-react"
 import { TopicButton } from "@/components/topic-button";
-import { Header } from "@/components/header";
 import { findAllTopicsRequest } from "@/http/topic/find-all-topics.http";
 
 const topics = [
@@ -112,8 +109,7 @@ export default async function HomePage() {
     const { data } = await findAllTopicsRequest();
 
     return (
-        <main className="w-full flex flex-col gap-20 justify-center items-center pb-20">
-            <Header />
+        <main className="w-full flex flex-col gap-20 justify-center items-center mt-10">
             <Hero />
             <div className="w-full max-w-[1200px] flex flex-row items-start justify-center gap-10">
                 <aside className="flex flex-col gap-4 sticky top-20">

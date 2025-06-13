@@ -7,10 +7,9 @@ import rehypeSanitize from "rehype-sanitize";
 
 import { Separator } from "@/components/ui/separator";
 import { UserBadge } from "@/components/user-badge";
-import { Header } from "@/components/header";
 import { findArticleBySlugRequest } from "@/http/articles/find-article-by-slug.http";
 import { formatDate } from "@/lib/utils";
-import { LikeButton } from "@/app/article/[slug]/like-button";
+import { LikeButton } from "./like-button";
 
 type ArticlePageProps = {
     params: Promise<{ slug: string }>;
@@ -22,9 +21,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     const { data } = await findArticleBySlugRequest(slug);
 
     return (
-        <div className="flex flex-col h-dvh justify-top items-center gap-10">
-            <Header />
-            <main className="w-full max-w-[800px] space-y-10 pb-10">
+        <div className="flex flex-col h-dvh justify-top items-center w-full">
+            <main className="w-full max-w-[800px] space-y-10">
                 <header className="flex flex-col gap-2">
                     <Link
                         href={`/topic/${data.topic.slug}`}

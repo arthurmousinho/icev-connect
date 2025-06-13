@@ -1,8 +1,7 @@
 import { ArticleCard } from "@/components/article-card"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { ArrowDown, ArrowUp, FileText, Heart, Search, TextSearch } from "lucide-react"
-import { Header } from "@/components/header"
+import { ArrowDown, ArrowUp, Heart, Search, TextSearch } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { findAllTopicsRequest } from "@/http/topic/find-all-topics.http"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -15,11 +14,11 @@ import {
 } from "@/components/ui/select";
 
 export default async function SeachPage() {
+
     const { data: topics } = await findAllTopicsRequest()
 
     return (
-        <div className="flex flex-col h-dvh justify-top items-center gap-10">
-            <Header />
+        <div className="flex flex-col h-dvh justify-top items-center w-full">
             <div className="w-full max-w-[1200px] flex flex-row items-start justify-center gap-10">
                 <header className="flex flex-col items-center justify-between gap-4 sticky top-20 w-[500px]">
                     <div className="flex flex-col justify-start gap-2 w-full">
@@ -72,14 +71,14 @@ export default async function SeachPage() {
                             </SelectContent>
                         </Select>
                     </header>
-                    <Separator className="my-6" />
+                    {/* <Separator className="my-6" />
                     <ArticleCard />
                     <Separator className="my-6" />
                     <ArticleCard />
                     <Separator className="my-6" />
                     <ArticleCard />
                     <Separator className="my-6" />
-                    <ArticleCard />
+                    <ArticleCard /> */}
                     <footer className="flex justify-end mt-6">
                         <Button variant="secondary">
                             Carregar mais

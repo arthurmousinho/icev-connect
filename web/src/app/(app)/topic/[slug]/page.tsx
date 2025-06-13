@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ArrowDown } from "lucide-react";
 import { TopicHeader } from "./topic-header";
-import { Header } from "@/components/header";
 import { findTopicBySlugRequest } from "@/http/topic/find-topic-by-slug.http";
 import { findAllArticlesByTopicSlugRequest } from "@/http/articles/find-all-articles-by-topic-slug.http";
 
@@ -18,8 +17,7 @@ export default async function TopicPage({ params }: TopicPageProps) {
     const { data: topicArticles } = await findAllArticlesByTopicSlugRequest(slug);
 
     return (
-        <div className="flex flex-col h-dvh justify-top items-center gap-10">
-            <Header />
+        <div className="flex flex-col h-dvh justify-top items-center w-full">
             <div className="w-full max-w-[1200px] flex flex-row items-start justify-center gap-10">
                 <TopicHeader
                     id={topicData.id}
