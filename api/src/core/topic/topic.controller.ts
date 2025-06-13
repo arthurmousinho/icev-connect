@@ -34,8 +34,11 @@ export class TopicController {
 
     @Post(':slug')
     public async findBySlug(@Param('slug') slug: string) {
-        const data = await this.topicService.findBySlug(slug);
-        return { data };
+        const [topicData, topicRanking] = await Promise.all([
+            this.topicService.findBySlug(slug),
+            this.topicService.getTopicRanking(slug)
+        ]);
+        return { data: { ...topicData, ranking: topicRanking } };
     }
 
     @Delete(':id')
