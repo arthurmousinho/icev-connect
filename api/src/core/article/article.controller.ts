@@ -4,6 +4,7 @@ import { CreateArticleDTO } from "./dtos/create-article.dto";
 import { AuthGuard } from "@nestjs/passport";
 import { RolesGuard } from "../auth/guards/role.guard";
 import { Roles } from "../auth/decorators/roles.decorator";
+import { SearchArticlesDTO } from "./dtos/search-articles.dto";
 
 @UseGuards(AuthGuard('jwt'), RolesGuard)
 @Controller('articles')
@@ -58,6 +59,7 @@ export class ArticlesController {
     }
 
     @Post('like/:id')
+    @HttpCode(204)
     public async like(@Param('id') id: string, @Req() req: any) {
         return await this.articleService.addLike({
             userId: req.user.id,
@@ -66,11 +68,19 @@ export class ArticlesController {
     }
 
     @Delete('like/:id')
+    @HttpCode(204)
     public async unlike(@Param('id') id: string, @Req() req: any) {
         return await this.articleService.removeLike({
             userId: req.user.id,
             articleId: id
         });
+    }
+
+    @Post('search')
+    @HttpCode(200)
+    public async search(@Body() body: SearchArticlesDTO) {
+        const articles = await this.articleService.searchArticles(body);
+        return { data: articles };
     }
 
 }

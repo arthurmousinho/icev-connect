@@ -7,6 +7,7 @@ import type { CreateArticleDTO } from "./dtos/create-article.dto";
 import type { FindMethodOptions } from "src/shared/types/find-method-options.type";
 import type { AddLikeDTO } from "./dtos/add-like.dto";
 import type { RemoveLikeDTO } from "./dtos/remove-like.dto";
+import type { SearchArticlesDTO } from "./dtos/search-articles.dto";
 
 @Injectable()
 export class ArticleService {
@@ -81,7 +82,7 @@ export class ArticleService {
         return article;
     }
 
-    public async findAll() {
+    public async findAll(search?: SearchArticlesDTO) {
         const articles = await this.prismaService.article.findMany({
             select: {
                 id: true,
@@ -298,6 +299,59 @@ export class ArticleService {
         ]);
 
         return;
+    }
+
+    public async searchArticles(search?: SearchArticlesDTO) {
+        const { query = '', topicSlugs = [], orderBy } = search ?? {};
+
+        const articles = await this.prismaService.article.findMany({
+            where: {
+                AND: [
+                    {
+                        OR: [
+                            { title: { contains: query, mode: 'insensitive' } },
+                            { description: { contains: query, mode: 'insensitive' } },
+                            { author: { name: { contains: query, mode: 'insensitive' } } },
+                        ],
+                    },
+                    topicSlugs.length > 0
+                        ? { topic: { slug: { in: topicSlugs } } }
+                        : {},
+                ],
+            },
+            orderBy:
+                orderBy === 'recent'
+                    ? { createdAt: 'desc' }
+                    : orderBy === 'oldest'
+                        ? { createdAt: 'asc' }
+                        : orderBy === 'relevance'
+                            ? { likesCount: 'desc' }
+                            : undefined,
+            select: {
+                id: true,
+                title: true,
+                slug: true,
+                description: true,
+                likesCount: true,
+                createdAt: true,
+                updatedAt: true,
+                author: {
+                    select: {
+                        email: true,
+                        name: true,
+                        avatarUrl: true,
+                    },
+                },
+                topic: {
+                    select: {
+                        icon: true,
+                        title: true,
+                    },
+                },
+            },
+        });
+
+        return articles;
     }
 
 }
