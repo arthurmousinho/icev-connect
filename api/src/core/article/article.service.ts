@@ -107,7 +107,7 @@ export class ArticleService {
     }
 
     public async findAllByTopicSlug(topicSlug: string) {
-        const topic = await this.topicService.findBySlug(topicSlug);
+        const topic = await this.topicService.findBySlug({ slug: topicSlug });
 
         const articlesByTopicSlug = await this.prismaService.article.findMany({
             where: {

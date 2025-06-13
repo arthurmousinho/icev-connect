@@ -30,9 +30,15 @@ export class TopicController {
     }
 
     @Get(':slug')
-    public async findBySlug(@Param('slug') slug: string) {
+    public async findBySlug(
+        @Param('slug') slug: string,
+        @Req() req: any
+    ) {
         const [topicData, topicRanking] = await Promise.all([
-            this.topicService.findBySlug(slug),
+            this.topicService.findBySlug({
+                userId: req.user.id,
+                slug,
+            }),
             this.topicService.getTopicRanking(slug)
         ]);
         return { data: { ...topicData, ranking: topicRanking } };

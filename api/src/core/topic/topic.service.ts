@@ -17,7 +17,7 @@ export class TopicService {
         const topicSlug = generateSlug(data.title)
 
         const topicWithSlug = await this.findBySlug(
-            topicSlug,
+            { slug: topicSlug },
             { throwError: false }
         );
 
@@ -58,7 +58,7 @@ export class TopicService {
     }
 
     public async getTopicRanking(topicSlug: string) {
-        await this.findBySlug(topicSlug);
+        await this.findBySlug({ slug: topicSlug });
 
         const rankingRaw = await this.prismaService.articleLike.groupBy({
             by: ['articleId'],
@@ -130,20 +130,31 @@ export class TopicService {
     }
 
     public async findBySlug(
-        slug: string,
+        data: { slug: string, userId?: string },
         options: FindMethodOptions = { throwError: true }
     ) {
         const topic = await this.prismaService.topic.findUnique({
-            where: {
-                slug
-            }
+            where: { slug: data.slug }
         });
 
         if (!topic && options?.throwError) {
             throw new NotFoundException('Tópico não encontrado.')
         }
 
-        return topic;
+        let hasLiked = false;
+
+        if (data.userId && topic) {
+            const like = await this.findUserFavoriteTopic(
+                { userId: data.userId, topicId: topic.id },
+                { throwError: false }
+            );
+            hasLiked = !!like;
+        }
+
+        return {
+            ...topic,
+            hasLiked
+        };
     }
 
     public async findById(
