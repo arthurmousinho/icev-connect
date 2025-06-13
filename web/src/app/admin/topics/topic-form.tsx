@@ -21,6 +21,7 @@ import { toast } from "sonner";
 import {
     Select,
     SelectContent,
+    SelectItem,
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
@@ -112,15 +113,24 @@ export function TopicForm({ data, isUpdating = false }: TopicFormProps) {
                                         <SelectValue placeholder="Ícone do tópico" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        {Object.keys(TopicIconEnum).map((key) => (
-                                            <TopicIcon icon={key as keyof typeof TopicIconEnum} />
+                                        {Object.keys(TopicIconEnum).map((key, index) => (
+                                            <SelectItem
+                                                value={key}
+                                                key={index}
+                                                className="flex flex-row items-center gap-2"
+                                            >
+                                                <TopicIcon
+                                                    icon={key as keyof typeof TopicIconEnum}
+                                                />
+                                                <p>{key}</p>
+                                            </SelectItem>
                                         ))}
                                     </SelectContent>
                                 </Select>
                             </FormControl>
                             <FormMessage />
                         </FormItem>
-                    )}                />
+                    )} />
                 <Button variant="default" type="submit" className="w-full" isLoading={isLoading}>
                     Salvar
                 </Button>

@@ -141,9 +141,13 @@ export class TopicService {
             throw new NotFoundException('Tópico não encontrado.')
         }
 
+        if (!topic) {
+            return null;
+        }
+
         let hasFavorite = false;
 
-        if (data.userId && topic) {
+        if (data.userId) {
             const like = await this.findUserFavoriteTopic(
                 { userId: data.userId, topicId: topic.id },
                 { throwError: false }

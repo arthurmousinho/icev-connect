@@ -45,9 +45,13 @@ export class ArticleService {
             throw new NotFoundException('Artigo não encontrado.');
         }
 
+        if (!article) {
+            return null;
+        }
+
         let hasLiked = false;
 
-        if (data.userId && article) {
+        if (data.userId) {
             const like = await this.findUserLikeForArticle(
                 { userId: data.userId, articleId: article.id },
                 { throwError: false }
