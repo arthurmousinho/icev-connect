@@ -13,7 +13,7 @@ export function TopicButton({
 
     return (
         <div className="flex items-center gap-2 text-sm font-medium whitespace-nowrap overflow-hidden">
-            <TopicIcon icon={icon} size={20} />
+            <TopicIcon icon={icon} size={16} />
             <span className="truncate">{title}</span>
         </div>
     )

@@ -22,6 +22,6 @@ type Response = {
 }
 
 export async function findTopicBySlugRequest(slug: string) {
-    const result = await api.post(`topics/${slug}`).json<Response>();
+    const result = await api.get(`topics/${slug}`).json<Response>();
     return result;
 }

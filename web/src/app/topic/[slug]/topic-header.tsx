@@ -3,10 +3,10 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { UserBadge } from "@/components/user-badge";
-import { Feather, Heart } from "lucide-react";
+import { Bookmark, Feather } from "lucide-react";
 import { TopicIcon } from "@/components/topic-icon";
-import type { TopicIconType } from "@/types/topic";
 import { LikeButton } from "@/app/article/[slug]/like-button";
+import type { TopicIconType } from "@/types/topic";
 
 type TopicHeaderProps = {
     title: string;
@@ -33,7 +33,7 @@ export function TopicHeader({ title, icon, ranking }: TopicHeaderProps) {
             </div>
             <nav className="space-y-2 w-full">
                 <Button variant="secondary" className="w-full">
-                    <Heart size={20} />
+                    <Bookmark size={20} />
                     Favoritar Tópico
                 </Button>
                 <Button variant="secondary" className="w-full">

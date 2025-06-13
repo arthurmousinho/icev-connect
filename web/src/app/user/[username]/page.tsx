@@ -9,6 +9,7 @@ import { findAllArticlesByUsernameRequest } from "@/http/articles/find-all-artic
 import { Header } from "@/components/header";
 import { findUserByUsernameRequest } from "@/http/user/find-user-by-username.http";
 import { getInitials } from "@/lib/utils";
+import Link from "next/link";
 
 const topics = [
     {
@@ -77,13 +78,19 @@ export default async function UserPage({ params }: UserPageProps) {
                         Tópicos de Interesse
                     </h2>
                     <div className="flex flex-col gap-4 w-full">
-                        {/* {topics.map((topic, index) => (
-                            <TopicButton
+                        {userData.favoriteTopics.map((topic, index) => (
+                            <Link
                                 key={index}
-                                title={topic.title}
-                                icon={topic.icon}
-                            />
-                        ))} */}
+                                href={`/topic/${topic.slug}`}
+                                className="hover:underline underline-offset-4"
+                            >
+                                <TopicButton
+                                    key={index}
+                                    title={topic.title}
+                                    icon={topic.icon}
+                                />
+                            </Link>
+                        ))}
                     </div>
                 </header>
                 <div className="flex flex-col w-full pb-10">
