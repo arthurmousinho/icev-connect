@@ -1,8 +1,10 @@
-import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "src/infra/database/prisma.service";
 import { generateSlug } from "src/shared/utils/generate-slug.util";
 import type { CreateTopicDTO } from "./dtos/create-topic.dto";
 import type { FindMethodOptions } from "src/shared/types/find-method-options.type";
+import type { AddTopicToFavoritesDTO } from "./dtos/remove-topic-from-favorites.dto";
+import type { RemoveTopicFromFavoritesDTO } from "./dtos/add-topic-to-favorites.dto copy";
 
 @Injectable()
 export class TopicService {
@@ -113,7 +115,7 @@ export class TopicService {
         const ranking = Array.from(authorMap.values())
             .filter((entry) => entry.likesCount > 0)
             .sort((a, b) => b.likesCount - a.likesCount)
-            .slice(0, 5) 
+            .slice(0, 5)
             .map((entry, index) => ({
                 position: index + 1,
                 user: {
@@ -144,28 +146,102 @@ export class TopicService {
         return topic;
     }
 
-    public async findById(id: string) {
+    public async findById(
+        id: string,
+        options: FindMethodOptions = { throwError: true }
+    ) {
         const topic = await this.prismaService.topic.findUnique({
             where: {
                 id
             }
         });
 
-        return topic;
-    }
-
-    public async deleteById(id: string) {
-        const topic = await this.findById(id)
-
-        if (!topic) {
+        if (!topic && options?.throwError) {
             throw new NotFoundException('Tópico não encontrado.')
         }
 
-        await this.prismaService.topic.delete({
+        return topic;
+    }
+
+    public async findUserFavoriteTopic(
+        data: { userId: string, topicId: string },
+        options: FindMethodOptions = { throwError: true }
+    ) {
+        const favoriteTopicByUser = await this.prismaService.favoriteTopic.findUnique({
             where: {
-                id
+                userId_topicId: {
+                    userId: data.userId,
+                    topicId: data.topicId
+                }
             }
         });
+
+        if (!favoriteTopicByUser && options.throwError) {
+            throw new BadRequestException('Você não favoritou esse tópico');
+        }
+
+        return favoriteTopicByUser;
+    }
+
+    public async addToFavorites(data: AddTopicToFavoritesDTO) {
+        const [topicExists, alreadyFavorite] = await Promise.all([
+            this.findById(data.topicId),
+            this.findUserFavoriteTopic(
+                { userId: data.userId, topicId: data.topicId },
+                { throwError: false }
+            )
+        ]);
+
+        if (alreadyFavorite) {
+            throw new ConflictException('Você já favoritou esse tópico');
+        }
+
+        await this.prismaService.favoriteTopic.create({
+            data: {
+                userId: data.userId,
+                topicId: data.topicId
+            }
+        });
+    }
+
+    public async removeFromFavorites(data: RemoveTopicFromFavoritesDTO) {
+        await Promise.all([
+            this.findById(data.topicId),
+            this.findUserFavoriteTopic({
+                userId: data.userId,
+                topicId: data.topicId
+            })
+        ]);
+
+        await this.prismaService.favoriteTopic.delete({
+            where: {
+                userId_topicId: {
+                    userId: data.userId,
+                    topicId: data.topicId
+                }
+            }
+        });
+    }
+
+    public async findUserFavoriteTopics(username: string) {
+        const favoriteTopicsByUser = await this.prismaService.favoriteTopic.findMany({
+            where: {
+                user: {
+                    username
+                }
+            },
+            select: {
+                topic: {
+                    select: {
+                        title: true,
+                        icon: true,
+                        slug: true,
+                    }
+                }
+            }
+        });
+
+        return favoriteTopicsByUser.map(item => item.topic);
     }
 
 }

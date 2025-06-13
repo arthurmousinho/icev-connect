@@ -1,13 +1,15 @@
 import { Controller, Get, Param, Req, UseGuards } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { AuthGuard } from "@nestjs/passport";
+import { TopicService } from "../topic/topic.service";
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('users')
 export class UserController {
 
     constructor(
-        private readonly userService: UserService
+        private readonly userService: UserService,
+        private readonly topicService: TopicService
     ) { }
 
     @Get('me')
@@ -18,8 +20,17 @@ export class UserController {
 
     @Get(':username')
     public async findByUsername(@Param('username') username: string) {
-        const data = await this.userService.findByUsername(username);
-        return { data }
+        const [userData, userFavoriteTopics] = await Promise.all([
+            this.userService.findByUsername(username),
+            this.topicService.findUserFavoriteTopics(username)
+        ]);
+
+        return {
+            data: {
+                ...userData,
+                favoriteTopics: userFavoriteTopics
+            }
+        }
     }
 
 }

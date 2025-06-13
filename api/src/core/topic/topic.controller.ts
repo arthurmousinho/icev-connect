@@ -1,11 +1,10 @@
-import { Body, Controller, Delete, HttpCode, Param, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, Req, UseGuards } from "@nestjs/common";
 import { TopicService } from "./topic.service";
 import { CreateTopicDTO } from "./dtos/create-topic.dto";
 import { AuthGuard } from "@nestjs/passport";
-import { RolesGuard } from "../auth/guards/role.guard";
-import { Roles } from "../auth/decorators/roles.decorator";
+import type { AddTopicToFavoritesDTO } from "./dtos/remove-topic-from-favorites.dto";
 
-@UseGuards(AuthGuard('jwt'), RolesGuard)
+@UseGuards(AuthGuard('jwt'))
 @Controller('topics')
 export class TopicController {
 
@@ -20,7 +19,6 @@ export class TopicController {
             title: body.title,
             icon: body.icon
         });
-
         return { data };
     }
 
@@ -28,11 +26,10 @@ export class TopicController {
     @HttpCode(200)
     public async findAll() {
         const data = await this.topicService.findAll();
-
         return { data };
     }
 
-    @Post(':slug')
+    @Get(':slug')
     public async findBySlug(@Param('slug') slug: string) {
         const [topicData, topicRanking] = await Promise.all([
             this.topicService.findBySlug(slug),
@@ -41,11 +38,28 @@ export class TopicController {
         return { data: { ...topicData, ranking: topicRanking } };
     }
 
-    @Delete(':id')
+    @Post('favorite/:id')
     @HttpCode(204)
-    @Roles('ADMIN')
-    public async deleteById(@Param('id') id: string) {
-        await this.topicService.deleteById(id);
+    public async addToFavorites(
+        @Param('id') id: string,
+        @Req() req: any
+    ) {
+        await this.topicService.addToFavorites({
+            topicId: id,
+            userId: req.user.id,
+        });
+    }
+
+    @Delete('favorite/:id')
+    @HttpCode(204)
+    public async removeFromFavorites(
+        @Param('id') id: string,
+        @Req() req: any
+    ) {
+        await this.topicService.removeFromFavorites({
+            topicId: id,
+            userId: req.user.id,
+        });
     }
 
 }
