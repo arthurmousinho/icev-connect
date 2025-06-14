@@ -83,11 +83,4 @@ export class ArticlesController {
         return { data: articles };
     }
 
-    @Get('user/feed')
-    @HttpCode(200)
-    public async feed(@Req() req: any) {
-        const userFeed = await this.articleService.getUserFeed(req.user.id);
-        return { data: userFeed };
-    }
-
 }

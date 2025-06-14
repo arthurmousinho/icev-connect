@@ -354,33 +354,4 @@ export class ArticleService {
         return articles;
     }
 
-    public async getUserFeed(userId: string) {
-        const [favoriteTopics, likedArticleIds] = await Promise.all([
-            this.prismaService.favoriteTopic.findMany({
-                where: { userId },
-                select: { topicId: true },
-            }),
-            this.prismaService.articleLike.findMany({
-                where: { userId },
-                select: { articleId: true },
-            }),
-        ]);
-
-        const topicIds = favoriteTopics.map((t) => t.topicId);
-        const excludedArticleIds = likedArticleIds.map((a) => a.articleId);
-
-        const feedArticles = await this.prismaService.article.findMany({
-            where: {
-                topicId: { in: topicIds.length > 0 ? topicIds : undefined },
-                id: { notIn: excludedArticleIds.length > 0 ? excludedArticleIds : undefined },
-            },
-            orderBy: {
-                createdAt: "desc",
-            },
-            take: 10,
-        });
-
-        return feedArticles;
-    }
-
 }
