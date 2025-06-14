@@ -79,9 +79,15 @@ export class ArticlesController {
     @Post('search')
     @HttpCode(200)
     public async search(@Body() body: SearchArticlesDTO) {
-        console.log(body)
         const articles = await this.articleService.searchArticles(body);
         return { data: articles };
+    }
+
+    @Get('user/feed')
+    @HttpCode(200)
+    public async feed(@Req() req: any) {
+        const userFeed = await this.articleService.getUserFeed(req.user.id);
+        return { data: userFeed };
     }
 
 }
