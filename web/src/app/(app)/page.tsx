@@ -1,9 +1,14 @@
 import { Hero } from "./hero";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { AlignLeft, Bot, Braces, Cpu, Database, DatabaseZap, EthernetPort, FileText, Gamepad2, Globe, Layers, ListChecks, Microchip, Monitor, Network, Smartphone } from "lucide-react"
 import { TopicButton } from "@/components/topic-button";
 import { findAllTopicsRequest } from "@/http/topic/find-all-topics.http";
+import { searchArticlesRequest } from "@/http/articles/search-articles.http";
+import { ArticleCard } from "@/components/article-card";
+import { Separator } from "@/components/ui/separator";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 const topics = [
     {
@@ -104,37 +109,86 @@ const topics = [
     }
 ]
 
-export default async function HomePage() {
-    
-    const { data } = await findAllTopicsRequest();
+type HomePageProps = {
+    searchParams: Promise<{ topic?: string }>;
+};
+
+export default async function HomePage({ searchParams }: HomePageProps) {
+
+    const { topic: topicFromParams } = await searchParams
+
+    const [
+        { data: topics },
+        { data: articles }
+    ] = await Promise.all([
+        findAllTopicsRequest(),
+        searchArticlesRequest({
+            topicSlugs: topicFromParams ? [topicFromParams] : [],
+            orderBy: 'relevance',
+        }),
+    ])
 
     return (
         <main className="w-full flex flex-col gap-20 justify-center items-center mt-10">
             <Hero />
             <div className="w-full max-w-[1200px] flex flex-row items-start justify-center gap-10">
-                <aside className="flex flex-col gap-4 sticky top-20">
-                    {data.map((topic, index) => (
+                <aside className="flex flex-col gap-2 sticky top-20">
+                    <Link
+                        href="/"
+                        className={cn(
+                            buttonVariants({ variant: !topicFromParams ? 'secondary' : 'ghost' }),
+                            "flex justify-start normal-case"
+                        )}
+                    >
                         <TopicButton
-                            key={index}
-                            title={topic.title}
-                            icon={topic.icon}
+                            title="Todos"
+                            icon="DEFAULT"
                         />
+                    </Link>
+
+                    {topics.map((topic) => (
+                        <Link
+                            key={topic.id}
+                            href={`/?topic=${topic.slug}`}
+                            className={cn(
+                                buttonVariants({ variant: topicFromParams === topic.slug ? 'secondary' : 'ghost' }),
+                                "flex justify-start normal-case"
+                            )}
+                        >
+                            <TopicButton
+                                title={topic.title}
+                                icon={topic.icon}
+                            />
+                        </Link>
                     ))}
                 </aside>
                 <div className="flex flex-col w-full">
-                    {/* <ArticleCard />
-                    <Separator className="my-6" />
-                    <ArticleCard />
-                    <Separator className="my-6" />
-                    <ArticleCard />
-                    <Separator className="my-6" />
-                    <ArticleCard /> */}
-                    <footer className="flex justify-end mt-6">
-                        <Button variant="secondary">
-                            Ver todos
-                            <ArrowRight size={20} />
-                        </Button>
-                    </footer>
+                    {articles.map((article) => (
+                        <div key={article.id}>
+                            <ArticleCard
+                                title={article.title}
+                                slug={article.slug}
+                                description={article.description}
+                                authorName={article.author.name}
+                                authorAvatarUrl={article.author.avatarUrl}
+                                likesCount={article.likesCount}
+                                topicTitle={article.topic.title}
+                                createdAt={article.createdAt}
+                            />
+                            <Separator className="my-6" />
+                        </div>
+                    ))}
+                    {topicFromParams && (
+                        <footer className="flex justify-end mt-6">
+                            <Link
+                                href={`/topic/${topicFromParams}`}
+                                className={cn(buttonVariants({ variant: 'secondary' }))}
+                            >
+                                Ver Mais
+                                <ArrowRight size={20} />
+                            </Link>
+                        </footer>
+                    )}
                 </div>
             </div>
         </main>

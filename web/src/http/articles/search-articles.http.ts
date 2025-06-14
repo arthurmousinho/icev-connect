@@ -24,7 +24,6 @@ type Response = {
 }
 
 export async function searchArticlesRequest(payload: SearchData) {
-    console.log(payload)
     const result = await api.post('articles/search', { json: payload }).json<Response>();
     return result;
 }

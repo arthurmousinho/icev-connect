@@ -1,12 +1,13 @@
 import { TopicIconEnum } from "@/types/topic";
 import {
-    AlignLeft, ArrowUpRight, Bot, Braces, Cpu, Database, DatabaseZap,
+    AlignJustify,
+    AlignLeft, Bot, Braces, Cpu, Database, DatabaseZap,
     EthernetPort, FileText, Gamepad2, Globe, Layers, ListChecks,
     Microchip, Monitor, Network, Smartphone
 } from "lucide-react"
 
 export const topicIconMap: Record<TopicIconEnum, React.ElementType> = {
-    DEFAULT: ArrowUpRight,
+    DEFAULT: AlignJustify,
     ALIGN_LEFT: AlignLeft,
     BOT: Bot,
     BRACES: Braces,
