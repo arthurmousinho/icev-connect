@@ -1,21 +1,39 @@
-import { ArticleCard } from "@/components/article-card"
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { ArrowDown, ArrowUp, Heart, Search, TextSearch } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { findAllTopicsRequest } from "@/http/topic/find-all-topics.http"
-import { Checkbox } from "@/components/ui/checkbox"
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
+import { ArticleCard } from "@/components/article-card";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { ArrowDown, Search, TextSearch, Trash } from "lucide-react";
+import { findAllTopicsRequest } from "@/http/topic/find-all-topics.http";
+import { searchArticlesRequest } from "@/http/articles/search-articles.http";
+import { SearchForm } from "./search-form";
+import type { SearchData } from "@/types/search";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 
-export default async function SeachPage() {
+type SearchPageProps = {
+    searchParams: Promise<SearchData>;
+};
 
-    const { data: topics } = await findAllTopicsRequest()
+export default async function SearchPage({ searchParams }: SearchPageProps) {
+
+    const { query, topicSlugs, orderBy } = await searchParams;
+
+    const payload = {
+        query,
+        orderBy,
+        topicSlugs: Array.isArray(topicSlugs)
+            ? topicSlugs
+            : topicSlugs
+                ? [topicSlugs]
+                : [],
+    };
+
+    const [
+        { data: topics },
+        { data: articles }
+    ] = await Promise.all([
+        findAllTopicsRequest(),
+        searchArticlesRequest(payload),
+    ])
 
     return (
         <div className="flex flex-col h-dvh justify-top items-center w-full">
@@ -25,68 +43,55 @@ export default async function SeachPage() {
                         <TextSearch size={50} />
                         <h1 className="font-bold text-2xl">Buscar Artigos</h1>
                     </div>
-                    <form className="w-full space-y-2">
-                        <Input type="search" placeholder="Buscar por título, descrição, autor..." className="w-full" />
-                        <Button variant="secondary" className="w-full">
-                            <Search size={20} />
-                            Buscar
-                        </Button>
-                    </form>
-                    <Separator />
-                    <h2 className="text-sm text-muted-foreground uppercase w-full text-left">Filtro por Tópico</h2>
-                    <div className="w-full space-y-4">
-                        {topics.map((topic) => (
-                            <div key={topic.id} className="flex flex-row items-center gap-2">
-                                <Checkbox />
-                                <label className="text-sm">{topic.title}</label>
-                            </div>
-                        ))}
-                    </div>
+                    <SearchForm
+                        topics={topics}
+                        defaultValues={payload}
+                    />
                 </header>
                 <div className="flex flex-col w-full pb-10">
                     <header className="flex items-center justify-between">
                         <div className="flex flex-row items-center gap-2">
                             <Search size={20} />
                             <p className="text-sm font-medium">
-                                <span className="font-bold">56</span> resultados encontrados
+                                <span className="font-bold">{articles.length}</span> resultados encontrados
                             </p>
                         </div>
-                        <Select>
-                            <SelectTrigger className="w-[180px]">
-                                <SelectValue placeholder="Ordernar por" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="relevance">
-                                    <Heart />
-                                    Relevância
-                                </SelectItem>
-                                <SelectItem value="recent">
-                                    <ArrowUp />
-                                    Mais recente
-                                </SelectItem>
-                                <SelectItem value="older">
-                                    <ArrowDown />
-                                    Mais antigo
-                                </SelectItem>
-                            </SelectContent>
-                        </Select>
+                        <Link href="/search" className={cn(buttonVariants({ variant: 'outline' }))}>
+                            <Trash />
+                            Limpar Filtros
+                        </Link>
                     </header>
-                    {/* <Separator className="my-6" />
-                    <ArticleCard />
                     <Separator className="my-6" />
-                    <ArticleCard />
-                    <Separator className="my-6" />
-                    <ArticleCard />
-                    <Separator className="my-6" />
-                    <ArticleCard /> */}
-                    <footer className="flex justify-end mt-6">
-                        <Button variant="secondary">
-                            Carregar mais
-                            <ArrowDown size={20} />
-                        </Button>
-                    </footer>
+                    {articles.length === 0 && (
+                        <p className="text-sm text-muted-foreground">
+                            Nenhum artigo encontrado.
+                        </p>
+                    )}
+                    {articles.map((article) => (
+                        <div key={article.id}>
+                            <ArticleCard
+                                title={article.title}
+                                slug={article.slug}
+                                description={article.description}
+                                authorName={article.author.name}
+                                authorAvatarUrl={article.author.avatarUrl}
+                                likesCount={article.likesCount}
+                                topicTitle={article.topic.title}
+                                createdAt={article.createdAt}
+                            />
+                            <Separator className="my-6" />
+                        </div>
+                    ))}
+                    {articles.length > 0 && (
+                        <footer className="flex justify-end mt-6">
+                            <Button variant="secondary">
+                                Carregar mais
+                                <ArrowDown size={20} />
+                            </Button>
+                        </footer>
+                    )}
                 </div>
             </div>
         </div>
-    )
+    );
 }
