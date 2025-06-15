@@ -7,10 +7,8 @@ import { ProfileButton } from "./profile-button";
 
 const links = [
     { href: "/", label: "Início", icon: <Home size={20} /> },
-    { href: "/feed", label: "Feed", icon: <LetterText size={20} /> },
     { href: "/search", label: "Pesquisar", icon: <TextSearch size={20} /> },
     { href: "/write", label: "Escrever", icon: <Feather size={20} /> },
-    { href: "/favorites", label: "Favoritos", icon: <Bookmark size={20} /> },
 ]
 
 export function Header() {

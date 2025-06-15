@@ -1,10 +1,10 @@
-import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { MoreVertical } from "lucide-react";
+import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Paginator } from "@/components/paginator";
 import { findAllArticlesRequest } from "@/http/articles/find-all-articles.http";
 import { TopicButton } from "@/components/topic-button";
 import { UserBadge } from "@/components/user-badge";
+import { LikeButton } from "@/app/(app)/article/[slug]/like-button";
+import { ArticleDetailsSheet } from "./article-details-sheet";
 
 type TopicsPageProps = {
     searchParams: Promise<{ [key: string]: string | undefined }>;
@@ -30,17 +30,20 @@ export default async function ArticlesPage({ searchParams }: TopicsPageProps) {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>Título</TableHead>
+                            <TableHead className="w-1/3">Título</TableHead>
                             <TableHead>Tópico</TableHead>
                             <TableHead>Autor</TableHead>
-                            <TableHead className="text-right">Opções</TableHead>
+                            <TableHead>Curtidas</TableHead>
+                            <TableHead className="text-right">Detalhes</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {data.map(article => (
                             <TableRow key={article.id}>
-                                <TableCell>
-                                    {article.title}
+                                <TableCell className="max-w-0 truncate">
+                                    <div className="truncate" title={article.title}>
+                                        {article.title}
+                                    </div>
                                 </TableCell>
                                 <TableCell>
                                     <TopicButton
@@ -49,22 +52,23 @@ export default async function ArticlesPage({ searchParams }: TopicsPageProps) {
                                     />
                                 </TableCell>
                                 <TableCell>
-                                    <UserBadge 
+                                    <UserBadge
                                         name={article.author.name}
                                         avatarUrl={article.author.avatarUrl}
                                     />
                                 </TableCell>
+                                <TableCell>
+                                    <LikeButton count={article.likesCount} />
+                                </TableCell>
                                 <TableCell className="text-right">
-                                    <Button variant="outline" size="icon">
-                                        <MoreVertical />
-                                    </Button>
+                                    <ArticleDetailsSheet data={article} />
                                 </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
                     <TableFooter>
                         <TableRow>
-                            <TableCell colSpan={4}>
+                            <TableCell colSpan={5}>
                                 <Paginator
                                     meta={{
                                         hasNextPage: false,
@@ -75,7 +79,7 @@ export default async function ArticlesPage({ searchParams }: TopicsPageProps) {
                                         page: 1
                                     }}
                                     showing={20}
-                                    basePath="/admin/topics"
+                                    basePath="/admin/articles"
                                 />
                             </TableCell>
                         </TableRow>

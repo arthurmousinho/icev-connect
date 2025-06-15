@@ -35,13 +35,14 @@ export function generateSlug(value: string) {
     .replace(/--+/g, '-'); // replace multiple hyphens with single hyphen
 }
 
-export function formatDate(date: string) {
-  return format(
-    new Date(date),
-    "d 'de' MMMM, yyyy",
-    { locale: ptBR }
-  );
+export function formatDate(date: string, withTime: boolean = false) {
+  const pattern = withTime
+    ? "d 'de' MMMM, yyyy 'às' HH:mm:ss"
+    : "d 'de' MMMM, yyyy";
+
+  return format(new Date(date), pattern, { locale: ptBR });
 }
+
 
 export function decodeJwtPayload(token: string) {
   try {

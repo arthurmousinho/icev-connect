@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input"
 import { useTransition } from "react";
-import { TopicSlugBadge } from "./topic-slug-badge";
 import { generateSlug } from "@/lib/utils";
 import { createTopicAction } from "./actions";
 import { toast } from "sonner";
@@ -27,6 +26,7 @@ import {
 } from "@/components/ui/select"
 import { TopicIconEnum } from "@/types/topic";
 import { TopicIcon } from "@/components/topic-icon";
+import { Kbd } from "@/components/kbd";
 
 const loginSchema = z.object({
     title: z
@@ -85,7 +85,9 @@ export function TopicForm({ data, isUpdating = false }: TopicFormProps) {
                                     <FormLabel>
                                         Slug:
                                     </FormLabel>
-                                    <TopicSlugBadge slug={generateSlug(form.watch('title'))} />
+                                    <Kbd>
+                                        {generateSlug(form.watch('title'))}
+                                    </Kbd>
                                 </div>
                             </header>
                             <FormControl>

@@ -7,6 +7,7 @@ type Response = {
         title: string;
         slug: string;
         description: string;
+        likesCount: number;
         author: {
             name: string;
             email: string;

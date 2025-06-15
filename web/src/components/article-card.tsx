@@ -25,7 +25,7 @@ export function ArticleCard({
     likesCount
 }: ArticleCardProps) {
     return (
-        <Link href={`/article/${slug}`} className="flex flex-col gap-3 group">
+        <Link href={`/article/${slug}`} className="flex flex-col gap-3 group" title={title}>
             <p className="text-sm font-semibold text-muted-foreground">
                 {topicTitle}
             </p>

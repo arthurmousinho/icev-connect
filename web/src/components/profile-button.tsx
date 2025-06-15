@@ -38,19 +38,28 @@ export async function ProfileButton() {
                 </div>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                    <Link href={`/user/${data.username}`} className="flex flex-row items-center gap-2">
+                    <Link
+                        href={`/user/${data.username}`}
+                        className="w-full flex flex-row items-center gap-2"
+                    >
                         <UserRound className="size-4" />
                         <span>Meu Perfil</span>
                     </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                    <Link href="/settings" className="flex flex-row items-center gap-2">
+                    <Link
+                        href="/settings"
+                        className="w-full flex flex-row items-center gap-2"
+                    >
                         <Settings className="size-4" />
                         <span>Configurações</span>
                     </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                    <a href="/auth/signout" className="flex flex-row items-center text-destructive w-full h-full">
+                    <a
+                        href="/auth/signout"
+                        className="w-full flex flex-row items-center text-destructive h-full"
+                    >
                         <LogOut className="mr-2 h-4 w-4 text-destructive" />
                         Sair
                     </a>

@@ -2,10 +2,10 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { MoreVertical } from "lucide-react";
 import { Paginator } from "@/components/paginator";
-import { TopicSlugBadge } from "./topic-slug-badge";
 import { CreateTopicDialog } from "./create-topic-dialog";
 import { findAllTopicsRequest } from "@/http/topic/find-all-topics.http";
 import { TopicButton } from "@/components/topic-button";
+import { Kbd } from "@/components/kbd";
 
 type TopicsPageProps = {
     searchParams: Promise<{ [key: string]: string | undefined }>;
@@ -48,7 +48,9 @@ export default async function TopicsPage({ searchParams }: TopicsPageProps) {
                                     />
                                 </TableCell>
                                 <TableCell>
-                                    <TopicSlugBadge slug={topic.slug} />
+                                    <Kbd>
+                                        {topic.slug}
+                                    </Kbd>
                                 </TableCell>
                                 <TableCell>
                                     {topic.postsCount ?? 0} artigos
