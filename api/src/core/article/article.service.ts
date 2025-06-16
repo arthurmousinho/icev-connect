@@ -1,8 +1,9 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "src/infra/database/prisma.service";
 import { generateSlug } from "src/shared/utils/generate-slug.util";
-import { TopicService } from "../topic/topic.service";
 import { UserService } from "../user/user.service";
+import { FindTopicBySlugUseCase } from "../topic/usecases/find-topic-by-slug.usecase";
+import { FindTopicByIdUseCase } from "../topic/usecases/find-topic-by-id.usecase";
 import type { CreateArticleDTO } from "./dtos/create-article.dto";
 import type { FindMethodOptions } from "src/shared/types/find-method-options.type";
 import type { AddLikeDTO } from "./dtos/add-like.dto";
@@ -14,8 +15,9 @@ export class ArticleService {
 
     constructor(
         private readonly prismaService: PrismaService,
-        private readonly topicService: TopicService,
-        private readonly userService: UserService
+        private readonly userService: UserService,
+        private readonly findTopicBySlugUseCase: FindTopicBySlugUseCase,
+        private readonly findTopicByIdUseCase: FindTopicByIdUseCase
     ) { }
 
     public async findBySlug(
@@ -112,7 +114,7 @@ export class ArticleService {
     }
 
     public async findAllByTopicSlug(topicSlug: string) {
-        const topic = await this.topicService.findBySlug({ slug: topicSlug });
+        const topic = await this.findTopicBySlugUseCase.execute({ slug: topicSlug });
 
         const articlesByTopicSlug = await this.prismaService.article.findMany({
             where: {
@@ -208,7 +210,7 @@ export class ArticleService {
     }
 
     public async create(data: CreateArticleDTO) {
-        const topic = await this.topicService.findById(data.topicId);
+        const topic = await this.findTopicByIdUseCase.execute(data.topicId);
 
         if (!topic) {
             throw new NotFoundException("Tópico não encontrado.");

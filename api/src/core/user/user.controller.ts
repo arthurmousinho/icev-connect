@@ -1,7 +1,6 @@
 import { Controller, Get, Param, Req, UseGuards } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { AuthGuard } from "@nestjs/passport";
-import { TopicService } from "../topic/topic.service";
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('users')
@@ -9,7 +8,6 @@ export class UserController {
 
     constructor(
         private readonly userService: UserService,
-        private readonly topicService: TopicService
     ) { }
 
     @Get('me')
