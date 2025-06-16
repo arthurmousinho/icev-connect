@@ -3,12 +3,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ArrowDown } from "lucide-react";
-import { Bot, Braces, Globe, ListChecks, Monitor } from "lucide-react"
+import { Bot, Braces, Globe, ListChecks } from "lucide-react"
 import { TopicButton } from "@/components/topic-button";
 import { findAllArticlesByUsernameRequest } from "@/http/articles/find-all-articles-by-username.http";
 import { findUserByUsernameRequest } from "@/http/user/find-user-by-username.http";
 import { getInitials } from "@/lib/utils";
 import Link from "next/link";
+import { findUserFavoriteTopicsRequest } from "@/http/topic/find-user-favorite-topics.http";
 
 const topics = [
     {
@@ -47,9 +48,11 @@ export default async function UserPage({ params }: UserPageProps) {
 
     const [
         { data: userData },
+        { data: userTopics },
         { data: userArticles }
     ] = await Promise.all([
         findUserByUsernameRequest(username),
+        findUserFavoriteTopicsRequest(username),
         findAllArticlesByUsernameRequest(username)
     ]);
 
@@ -76,7 +79,7 @@ export default async function UserPage({ params }: UserPageProps) {
                         Tópicos de Interesse
                     </h2>
                     <div className="flex flex-col gap-4 w-full">
-                        {userData.favoriteTopics.map((topic, index) => (
+                        {userTopics.map((topic, index) => (
                             <Link
                                 key={index}
                                 href={`/topic/${topic.slug}`}
