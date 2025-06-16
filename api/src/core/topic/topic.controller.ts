@@ -7,6 +7,7 @@ import { FindTopicBySlugUseCase } from "./usecases/find-topic-by-slug.usecase";
 import { GetTopicRankingUseCase } from "./usecases/get-topic-ranking.usecase";
 import { AddTopicToFavoritesUseCase } from "./usecases/add-topic-to-favorites.usecase";
 import { RemoveTopicFromFavoritesUseCase } from "./usecases/remove-topic-from-favorites.usecase";
+import { FindUserFavoritesTopicsUseCase } from "./usecases/find-user-favorites-topics.usecase";
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('topics')
@@ -18,7 +19,8 @@ export class TopicController {
         private readonly findTopicBySlugUseCase: FindTopicBySlugUseCase,
         private readonly getTopicRankingUseCase: GetTopicRankingUseCase,
         private readonly addTopicToFavoritesUseCase: AddTopicToFavoritesUseCase,
-        private readonly removeTopicFromFavoritesUseCase: RemoveTopicFromFavoritesUseCase
+        private readonly removeTopicFromFavoritesUseCase: RemoveTopicFromFavoritesUseCase,
+        private readonly findUserFavoritesTopicsUseCase: FindUserFavoritesTopicsUseCase
     ) { }
 
     @Post()
@@ -53,7 +55,13 @@ export class TopicController {
         return { data: { ...topicData, ranking: topicRanking } };
     }
 
-    @Post('favorite/:id')
+    @Get('user/favorites')
+    public async findUserFavorites(@Req() req: any) {
+        const data = await this.findUserFavoritesTopicsUseCase.execute(req.user.id);
+        return { data }
+    }
+
+    @Post('user/favorite/:id')
     @HttpCode(204)
     public async addToFavorites(
         @Param('id') id: string,
@@ -65,7 +73,7 @@ export class TopicController {
         });
     }
 
-    @Delete('favorite/:id')
+    @Delete('user/favorite/:id')
     @HttpCode(204)
     public async removeFromFavorites(
         @Param('id') id: string,

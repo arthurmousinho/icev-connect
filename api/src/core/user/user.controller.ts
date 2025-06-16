@@ -18,17 +18,8 @@ export class UserController {
 
     @Get(':username')
     public async findByUsername(@Param('username') username: string) {
-        const [userData, userFavoriteTopics] = await Promise.all([
-            this.userService.findByUsername(username),
-            this.topicService.findUserFavoriteTopics(username)
-        ]);
-
-        return {
-            data: {
-                ...userData,
-                favoriteTopics: userFavoriteTopics
-            }
-        }
+        const data = await this.userService.findByUsername(username)
+        return { data }
     }
 
 }

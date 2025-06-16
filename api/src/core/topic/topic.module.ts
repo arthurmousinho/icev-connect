@@ -9,10 +9,13 @@ import { FindAllTopicsUseCase } from "./usecases/find-all-topics.usecase";
 import { FindTopicBySlugUseCase } from "./usecases/find-topic-by-slug.usecase";
 import { GetTopicRankingUseCase } from "./usecases/get-topic-ranking.usecase";
 import { FindTopicByIdUseCase } from "./usecases/find-topic-by-id.usecase";
+import { FindUserFavoritesTopicsUseCase } from "./usecases/find-user-favorites-topics.usecase";
+import { UserModule } from "../user/user.module";
 
 @Module({
     imports: [
-        DatabaseModule
+        DatabaseModule,
+        UserModule
     ],
     controllers: [
         TopicController
@@ -26,7 +29,8 @@ import { FindTopicByIdUseCase } from "./usecases/find-topic-by-id.usecase";
         FindAllTopicsUseCase,
         FindTopicBySlugUseCase,
         FindTopicByIdUseCase,
-        GetTopicRankingUseCase
+        GetTopicRankingUseCase,
+        FindUserFavoritesTopicsUseCase
     ],
     exports: [
         FindTopicByIdUseCase,
