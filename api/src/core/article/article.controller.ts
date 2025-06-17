@@ -1,22 +1,37 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Post, Req, UseGuards } from "@nestjs/common";
-import { ArticleService } from "./article.service";
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, Query, Req, UseGuards } from "@nestjs/common";
 import { CreateArticleDTO } from "./dtos/create-article.dto";
 import { AuthGuard } from "@nestjs/passport";
 import { RolesGuard } from "../auth/guards/role.guard";
 import { Roles } from "../auth/decorators/roles.decorator";
 import { SearchArticlesDTO } from "./dtos/search-articles.dto";
 
+import { CreateArticleUseCase } from "./usecases/create-article.usecase";
+import { FindAllArticlesByTopicSlugUseCase } from "./usecases/find-all-articles-by-topic-slug.usecase";
+import { FindAllArticlesByUsernameUseCase } from "./usecases/find-all-articles-by-username.usecase";
+import { FindAllArticlesUseCase } from "./usecases/find-all-articles.usecase";
+import { FindArticleBySlugUseCase } from "./usecases/find-article-by-slug.usecase";
+import { LikeArticleUseCase } from "./usecases/like-article.usecase";
+import { UnlikeArticleUseCase } from "./usecases/unlike-article.usecase";
+import { SearchArticlesUseCase } from "./usecases/search-articles.usecase";
+
 @UseGuards(AuthGuard('jwt'), RolesGuard)
 @Controller('articles')
 export class ArticlesController {
 
     constructor(
-        private readonly articleService: ArticleService
+        private readonly createArticleUseCase: CreateArticleUseCase,
+        private readonly findAllArticlesByTopicSlugUseCase: FindAllArticlesByTopicSlugUseCase,
+        private readonly findAllArticlesByUsernameUseCase: FindAllArticlesByUsernameUseCase,
+        private readonly findAllArticlesUseCase: FindAllArticlesUseCase,
+        private readonly findArticleBySlugUseCase: FindArticleBySlugUseCase,
+        private readonly likeArticleUseCase: LikeArticleUseCase,
+        private readonly unlikeArticleUseCase: UnlikeArticleUseCase,
+        private readonly searchArticlesUseCase: SearchArticlesUseCase
     ) { }
 
     @Get(':slug')
     public async findBySlug(@Param('slug') slug: string, @Req() req: any) {
-        const data = await this.articleService.findBySlug({
+        const data = await this.findArticleBySlugUseCase.execute({
             slug,
             userId: req.user.id
         });
@@ -25,7 +40,7 @@ export class ArticlesController {
 
     @Post()
     public async create(@Body() body: CreateArticleDTO, @Req() req: any) {
-        const data = await this.articleService.create({
+        const data = await this.createArticleUseCase.execute({
             title: body.title,
             description: body.description,
             topicId: body.topicId,
@@ -39,29 +54,52 @@ export class ArticlesController {
     @Post('all')
     @HttpCode(200)
     @Roles('ADMIN')
-    public async findAll() {
-        const data = await this.articleService.findAll();
-        return { data };
+    public async findAll(
+        @Query('page') page = '1',
+        @Query('limit') limit = '10',
+    ) {
+        return await this.findAllArticlesUseCase.execute({
+            page: parseInt(page, 10),
+            limit: parseInt(limit, 10),
+        });
     }
 
     @HttpCode(200)
     @Post('topic/:topicSlug')
-    public async findAllByTopic(@Param('topicSlug') topicSlug: string) {
-        const data = await this.articleService.findAllByTopicSlug(topicSlug);
-        return { data };
+    public async findAllByTopic(
+        @Param('topicSlug') topicSlug: string,
+        @Query('page') page = '1',
+        @Query('limit') limit = '10',
+    ) {
+        return await this.findAllArticlesByTopicSlugUseCase.execute({
+            slug: topicSlug,
+            pagination: {
+                page: parseInt(page, 10),
+                limit: parseInt(limit, 10),
+            }
+        });
     }
 
     @HttpCode(200)
     @Post('user/:username')
-    public async findAllByUsername(@Param('username') username: string) {
-        const data = await this.articleService.findAllByUsername(username);
-        return { data };
+    public async findAllByUsername(
+        @Param('username') username: string,
+        @Query('page') page = '1',
+        @Query('limit') limit = '10',
+    ) {
+        return await this.findAllArticlesByUsernameUseCase.execute({
+            username,
+            pagination: {
+                page: parseInt(page, 10),
+                limit: parseInt(limit, 10),
+            }
+        });
     }
 
     @Post('like/:id')
     @HttpCode(204)
     public async like(@Param('id') id: string, @Req() req: any) {
-        return await this.articleService.addLike({
+        return await this.likeArticleUseCase.execute({
             userId: req.user.id,
             articleId: id
         });
@@ -70,7 +108,7 @@ export class ArticlesController {
     @Delete('like/:id')
     @HttpCode(204)
     public async unlike(@Param('id') id: string, @Req() req: any) {
-        return await this.articleService.removeLike({
+        return await this.unlikeArticleUseCase.execute({
             userId: req.user.id,
             articleId: id
         });
@@ -78,9 +116,16 @@ export class ArticlesController {
 
     @Post('search')
     @HttpCode(200)
-    public async search(@Body() body: SearchArticlesDTO) {
-        const articles = await this.articleService.searchArticles(body);
-        return { data: articles };
+    public async search(
+        @Body() body: SearchArticlesDTO,
+        @Query('page') page = '1',
+        @Query('limit') limit = '10',
+    ) {
+        return await this.searchArticlesUseCase.execute({
+            ...body,
+            page: parseInt(page, 10),
+            limit: parseInt(limit, 10),
+        });
     }
 
 }
