@@ -15,6 +15,7 @@ import { LoginWithEmailAndPassswordDTO } from './dtos/login-with-email-password.
 
 @Controller('auth')
 export class AuthController {
+    
     constructor(private readonly authService: AuthService) { }
 
     @Get('google')

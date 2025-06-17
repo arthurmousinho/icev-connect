@@ -2,13 +2,13 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Request } from 'express';
-import { UserService } from 'src/core/user/user.service';
+import { FindUserByIdUseCase } from 'src/core/user/usecases/find-user-by-id.usecase';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 
     constructor(
-        private readonly userService: UserService
+        private readonly findUserByIdUseCase: FindUserByIdUseCase
     ) {
         super({
             jwtFromRequest: ExtractJwt.fromExtractors([
@@ -21,11 +21,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     }
 
     public async validate(payload: { sub: string }) {
-        const user = await this.userService.findById(payload.sub);
-
-        if (!user) {
-            throw new UnauthorizedException('Usuário não encontrado ou não autorizado');
-        }
+        const user = await this.findUserByIdUseCase.execute(payload.sub);
 
         if (!user.isActive) {
             throw new UnauthorizedException('Usuário inativo');

@@ -1,7 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { compare } from 'bcrypt';
-import { UserService } from '../user/user.service';
+import { FindUserByEmailUseCase } from '../user/usecases/find-user-by-email.usecase';
+import { FindOrCreateUserByEmailUseCase } from '../user/usecases/find-or-create-user-by-email.usecase';
 import type { LoginWithEmailAndPassswordDTO } from './dtos/login-with-email-password.dto';
 import type { UserRole } from 'generated/prisma';
 
@@ -9,23 +10,20 @@ import type { UserRole } from 'generated/prisma';
 export class AuthService {
 
     constructor(
-        private userService: UserService,
-        private jwtService: JwtService,
+        private readonly jwtService: JwtService,
+        private readonly findUserByEmailUseCase: FindUserByEmailUseCase,
+        private readonly findOrCreateUserByEmailUseCase: FindOrCreateUserByEmailUseCase
     ) { }
 
     public async validateOAuthLogin(user: any) {
         const { email, name, avatarUrl, username } = user;
 
-        let userFound = await this.userService.findByEmail(email);
-
-        if (!userFound) {
-            userFound = await this.userService.create({
-                email,
-                name,
-                username,
-                avatarUrl,
-            });
-        }
+        const userFound = await this.findOrCreateUserByEmailUseCase.execute({
+            email,
+            name,
+            avatarUrl,
+            username,
+        });
 
         const accessToken = this.signToken({
             userId: userFound.id,
@@ -39,9 +37,9 @@ export class AuthService {
     public async loginWithEmailAndPassword(data: LoginWithEmailAndPassswordDTO) {
         const { email, password } = data;
 
-        const user = await this.userService.findByEmail(email);
+        const user = await this.findUserByEmailUseCase.execute(email);
 
-        if (!user || !user.hashedPassword) {
+        if (!user.hashedPassword) {
             throw new UnauthorizedException('Credenciais inválidas');
         }
 
