@@ -1,11 +1,3 @@
-export type FilterType = "contains" | "equals";
-
-export type Filter = {
-    key: string;
-    value: string | number;
-    type: FilterType;
-};
-
 export type PaginatedMetadata = {
     total: number;
     limit: number;
@@ -23,5 +15,4 @@ export type PaginatedResponse<T> = {
 export type PaginationRequest = {
     page: number;
     limit: number;
-    filters?: Filter[];
 }

@@ -1,5 +1,5 @@
 import { Hero } from "./hero";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { AlignLeft, Bot, Braces, Cpu, Database, DatabaseZap, EthernetPort, FileText, Gamepad2, Globe, Layers, ListChecks, Microchip, Monitor, Network, Smartphone } from "lucide-react"
 import { TopicButton } from "@/components/topic-button";
@@ -122,10 +122,16 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         { data: articles }
     ] = await Promise.all([
         findAllTopicsRequest(),
-        searchArticlesRequest({
-            topicSlugs: topicFromParams ? [topicFromParams] : [],
-            orderBy: 'relevance',
-        }),
+        searchArticlesRequest(
+            {
+                topicSlugs: topicFromParams ? [topicFromParams] : [],
+                orderBy: 'relevance',
+            },
+            {
+                page: 1,
+                limit: 3
+            }
+        ),
     ])
 
     return (

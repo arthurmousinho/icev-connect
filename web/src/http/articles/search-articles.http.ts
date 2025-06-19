@@ -1,6 +1,7 @@
 import { api } from "@/config/api.config";
 import type { TopicIconType } from "@/types/topic";
 import type { SearchData } from "@/types/search";
+import type { PaginationRequest } from "@/types/pagination";
 
 type Response = {
     data: {
@@ -23,7 +24,10 @@ type Response = {
     }[]
 }
 
-export async function searchArticlesRequest(payload: SearchData) {
-    const result = await api.post('articles/search', { json: payload }).json<Response>();
+export async function searchArticlesRequest(payload: SearchData, pagination?: PaginationRequest) {
+    const result = await api.post(
+        `articles/search?page=${pagination?.page}&limit=${pagination?.limit}`,
+        { json: payload })
+        .json<Response>();
     return result;
 }
