@@ -1,54 +1,51 @@
 # iCEVConnect
 
-🚀 Plataforma de comunidades acadêmicas do iCEV, criada para conectar alunos por meio de posts, tópicos de interesse e eventos.
+**Promovendo o aprendizado colaborativo entre os alunos de Engenharia de Software**
 
----
+## 📚 Sobre o Projeto
 
-## 🗺️ Visão Geral
+O **iCEVConnect** é uma plataforma open-source desenvolvida exclusivamente para os alunos do curso de **Engenharia de Software** da faculdade **iCEV**. Seu principal objetivo é fortalecer a comunidade acadêmica por meio da **troca de conhecimentos**, permitindo que os estudantes compartilhem artigos, tutoriais e experiências relacionados às disciplinas do curso.
 
-O iCEVConnect é uma rede acadêmica voltada exclusivamente para alunos do iCEV. O objetivo é fortalecer a troca de conhecimentos e promover eventos dentro do ambiente acadêmico.
-
----
+Por meio de um ambiente simples, moderno e intuitivo, os alunos podem publicar conteúdos organizados por tópicos (como "Estrutura de Dados", "Engenharia de Requisitos", etc.), contribuindo diretamente para o crescimento intelectual de outros colegas.
 
 ## 🔥 Funcionalidades
 
-- [ ] **Posts**
-  - Alunos podem escrever e compartilhar conteúdos públicos ou relacionados aos tópicos que seguem.
-  - Feed com postagens dos alunos.
+- ✅ Cadastro e login com e-mail institucional iCEV (OAuth2 via Google)
+- ✅ Perfis de alunos com publicações e tópicos favoritos
+- ✅ Criação de **artigos** com suporte a Markdown
+- ✅ Organização por **tópicos/disciplinas**
+- ✅ Rankings de colaboração por disciplina
+- ✅ Plataforma totalmente **open-source**
 
-- [ ] **Tópicos (Disciplinas)**
-  - Os alunos podem seguir tópicos de interesse, como disciplinas, áreas de estudo ou comunidades específicas (ex.: "Desenvolvimento Web", "Inteligência Artificial").
-  - Cada tópico possui seu próprio feed de postagens.
 
-- [ ] **Eventos**
-  - Divulgação de eventos acadêmicos, como minicursos, workshops, palestras e encontros organizados por alunos ou pelo curso.
-  - Os alunos podem **marcar presença** nos eventos.
+## 🧠 Tecnologias Utilizadas
 
-- [ ] **Perfil do Aluno**
-  - Cada usuário possui um perfil com informações básicas e suas áreas de interesse.
-  - Permite visualizar os tópicos seguidos, posts feitos e eventos participados.
+### Frontend
+- [Next.js](https://nextjs.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Shadcn/ui](https://ui.shadcn.com/)
+- [TypeScript](https://www.typescriptlang.org/)
 
----
+### Backend
+- [NestJS](https://nestjs.com/)
+- [Prisma ORM](https://www.prisma.io/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [OAuth2](https://developers.google.com/identity)
 
-## 🧠 Relacionamento dos Componentes
+## 🛠 Como Contribuir
 
-- 👤 **Aluno (Perfil)** pode:
-  - ✍️ **Escrever** posts.
-  - 📚 **Seguir** tópicos (disciplinas ou comunidades).
-  - 🎯 **Marcar presença** em eventos.
+1. Faça um fork do projeto
+2. Crie uma branch: `git checkout -b minha-feature`
+3. Faça suas alterações e commit: `git commit -m 'feat: nova funcionalidade'`
+4. Envie para o fork: `git push origin minha-feature`
+5. Abra um Pull Request neste repositório
 
----
+## 📌 Status do Projeto
 
-## 🤝 Como Contribuir
+🚧 Em desenvolvimento (MVP)  
 
-1. **Fork este repositório**
-2. Crie uma branch (`git checkout -b feature/nome-da-sua-feature`)
-3. Faça commit das alterações (`git commit -m 'feat: minha nova feature'`)
-4. Envie para sua branch (`git push origin feature/nome-da-sua-feature`)
-5. Abra um Pull Request
 
----
+## 📄 Licença
 
-## 📝 Licença
-
-Este projeto está sob a licença MIT.
+Este projeto é licenciado sob a **MIT License**.  
+Sinta-se livre para usar, estudar e contribuir com o código!
